@@ -1,0 +1,17 @@
+{
+    "name": "hexlet/code",
+    "description": "Diffeкуerence calculator",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hexlet\\Code\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Evgenii Ivanov",
+            "email": "ievgesha@mail.ru"
+        }
+    ]
+}
