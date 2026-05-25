@@ -1,12 +1,15 @@
 {
     "name": "hexlet/code",
-    "description": "Diffeкуerence calculator",
+    "description": "Difference calculator",
     "type": "project",
     "license": "MIT",
     "autoload": {
         "psr-4": {
             "Hexlet\\Code\\": "src/"
-        }
+        },
+        "files": [
+            "config/config.php",
+        ]
     },
     "authors": [
         {
