@@ -3,5 +3,7 @@
 gendiff:
 	./bin/gendiff
 
-tests:
+# Запуск Тестов
+
+test:
 	composer exec --verbose phpunit tests
