@@ -36,7 +36,7 @@ class FunctionsTest extends TestCase
   + verbose: true
 }";
         $format = 'stylish';
-        $firstFile = '../php-project-48/tests/data/file1.json';
+        $firstFile = 'tests/../tests/data/file1.json';
         $secondFile = $currentDir . '/tests/data/file2.json';
         $this->assertEquals($expected, genDiff($firstFile, $secondFile, $format));
     }
