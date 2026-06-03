@@ -13,18 +13,18 @@ class DataFileTest extends TestCase
 
     public function setUp(): void
     {
-        $this->firstFile = new DataFile("tests/data/file1.json");
+        $this->firstFile = new DataFile("tests/fixtures/file1.json");
         $this->firstFile->parseJson();
-        $this->secondFile = new DataFile("tests/data/file2.json");
+        $this->secondFile = new DataFile("tests/fixtures/file2.json");
         $this->secondFile->parseJson();
-        $this->jsanFile = new DataFile('tests/data/file1.jsan');
+        $this->jsanFile = new DataFile('tests/fixtures/file1.jsan');
         $this->jsanFile->parseJson();
     }
     public function testGetters(): void
     {
         $this->assertEquals('file1', $this->firstFile->getName());
         $this->assertEquals('file1.json', $this->firstFile->getBaseName());
-        $this->assertEquals('tests/data', $this->firstFile->getPath());
+        $this->assertEquals('tests/fixtures', $this->firstFile->getPath());
         $this->assertEquals('json', $this->firstFile->getExtension());
     }
 

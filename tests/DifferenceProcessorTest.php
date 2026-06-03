@@ -49,8 +49,8 @@ class DifferenceProcessorTest extends TestCase
                 $expected,
                 [
                     '--format' => 'stylish',
-                    '<firstFile>' => 'tests/../tests/data/file1.json',
-                    '<secondFile>' => $currentDir . '/tests/data/file2.json'
+                    '<firstFile>' => 'tests/../tests/fixtures/file1.json',
+                    '<secondFile>' => $currentDir . '/tests/fixtures/file2.json'
                 ]
             ],
             [

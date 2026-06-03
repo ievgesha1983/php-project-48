@@ -19,9 +19,9 @@ class FunctionsTest extends TestCase
     public function testIsValidFile(): void
     {
         $currentDir = getcwd();
-        $this->assertFalse(isValidFile('tests/data/file1.jsan'));
-        $this->assertTrue(isValidFile('tests/data/file1.json'));
-        $this->assertTrue(isValidFile("{$currentDir}/tests/data/file1.json"));
+        $this->assertFalse(isValidFile('tests/fixtures/file1.jsan'));
+        $this->assertTrue(isValidFile('tests/fixtures/file1.json'));
+        $this->assertTrue(isValidFile("{$currentDir}/tests/fixtures/file1.json"));
     }
 
     public function testGenDiff(): void
@@ -36,8 +36,8 @@ class FunctionsTest extends TestCase
   + verbose: true
 }";
         $format = 'stylish';
-        $firstFile = 'tests/../tests/data/file1.json';
-        $secondFile = $currentDir . '/tests/data/file2.json';
+        $firstFile = 'tests/../tests/fixtures/file1.json';
+        $secondFile = $currentDir . '/tests/fixtures/file2.json';
         $this->assertEquals($expected, genDiff($firstFile, $secondFile, $format));
     }
 }
