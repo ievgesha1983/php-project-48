@@ -1,0 +1,10 @@
+name: test-and-lint.yml
+on: push
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: make test
+      - run: make lint
