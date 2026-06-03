@@ -8,6 +8,16 @@ use PHPUnit\Framework\TestCase;
 
 class DifferenceProcessorTest extends TestCase
 {
+    public function testToStylishString(): void
+    {
+        $data = [
+            ['type' => -1, 'key' => 'follow', 'value' => false],
+            ['type' => 0, 'key' => 'host', 'value' => 'hexlet.io'],
+            ['type' => -1, 'key' => 'proxy', 'value' => '123.234.53.22'],
+        ];
+        $expected = "{\n  - follow: false\n    host: hexlet.io\n  - proxy: 123.234.53.22\n}";
+        $this->assertEquals($expected, DifferenceProcessor::toStylishString($data));
+    }
     #[DataProvider('getDiffInfoProvider')]
     public function testGetDiffInfo($expected, array $arguments): void
     {
@@ -16,13 +26,37 @@ class DifferenceProcessorTest extends TestCase
 
     public static function getDiffInfoProvider(): array
     {
+        $expected = "{
+  - follow: false
+    host: hexlet.io
+  - proxy: 123.234.53.22
+  - timeout: 50
+  + timeout: 20
+  + verbose: true
+}";
+        $currentDir = getcwd();
         return [
             ['Формат вывода не указан', []],
             ['Формат вывода не указан', ['<firstFile>' => '', '<secondFile>' => '']],
             ['Не указан firstFile', ['--format' => 'stylish']],
-            ['Не указан firstFile', ['--format' => 'stylish', '<secondFile>' => '']],
-            ['Не указан secondFile', ['--format' => 'stylish', '<firstFile>' => '']],
-            ['Пока все хорошо', ['--format' => 'stylish', '<firstFile>' => '', '<secondFile>' => '']],
+            ['Не указан firstFile', ['--format' => 'stylish', '<secondFile>' => 'file2.json']],
+            ['Не указан secondFile', ['--format' => 'stylish', '<firstFile>' => 'file1.json']],
+            [
+                'Формат ввода указан некорректно',
+                ['--format' => 'other', '<firstFile>' => 'file1.json', '<secondFile>' => 'file2.json']
+            ],
+            [
+                $expected,
+                [
+                    '--format' => 'stylish',
+                    '<firstFile>' => 'tests/../tests/data/file1.json',
+                    '<secondFile>' => $currentDir . '/tests/data/file2.json'
+                ]
+            ],
+            [
+                'tests/date/file1.json - файл не существует или не соответствует формату',
+                ['--format' => 'stylish', '<firstFile>' => 'tests/date/file1.json', '<secondFile>' => 'file2.json']
+            ],
         ];
     }
 }
