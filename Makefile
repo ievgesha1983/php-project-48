@@ -1,7 +1,12 @@
-# Запуск gendiff
+# установка зависимостей
 
-gendiff:
-	./bin/gendiff
+install:
+	composer install
+
+# проверка проекта Composer'ом
+
+validate:
+	composer validate
 
 # проверка проекта CodeSniffer'ом
 
