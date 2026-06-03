@@ -1,4 +1,4 @@
-name: test-and-lint.yml
+name: test-and-lint
 on: push
 
 jobs:
@@ -6,5 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - run: make install
       - run: make test
       - run: make lint
