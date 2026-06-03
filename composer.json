@@ -3,6 +3,9 @@
     "description": "Difference calculator",
     "type": "project",
     "license": "MIT",
+    "bin": [
+        "bin/gendiff"
+    ],
     "autoload": {
         "psr-4": {
             "Hexlet\\Code\\": "src/",
