@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - run: make install
-      - run: make test
-      - run: make lint
+      - name: Install project
+        run: make install
+      - name: Run Linter
+        run: make lint
+      - name: Run tests with coverage
+        run: make test-coverage

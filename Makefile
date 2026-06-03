@@ -17,3 +17,14 @@ lint:
 
 test:
 	composer exec --verbose phpunit tests -- --display-deprecations
+
+# Формирование файла покрытия тестами
+
+test-coverage:
+	XDEBUG_MODE=coverage composer exec --verbose phpunit tests -- --coverage-clover=build/logs/clover.xml
+
+# Вывод покрытия тестами на экран
+
+test-coverage-text:
+	XDEBUG_MODE=coverage composer exec --verbose phpunit tests -- --coverage-text
+
