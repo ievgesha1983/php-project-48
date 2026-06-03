@@ -27,14 +27,7 @@ class FunctionsTest extends TestCase
     public function testGenDiff(): void
     {
         $currentDir = getcwd();
-        $expected = "{
-  - follow: false
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
-}";
+        $expected = file_get_contents(__DIR__ . '/fixtures/diff_info_result.txt');
         $format = 'stylish';
         $firstFile = 'tests/../tests/fixtures/file1.json';
         $secondFile = $currentDir . '/tests/fixtures/file2.json';

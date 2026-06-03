@@ -26,14 +26,7 @@ class DifferenceProcessorTest extends TestCase
 
     public static function getDiffInfoProvider(): array
     {
-        $expected = "{
-  - follow: false
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
-}";
+        $expected = file_get_contents(__DIR__ . '/fixtures/diff_info_result.txt');
         $currentDir = getcwd();
         return [
             ['Формат вывода не указан', []],
