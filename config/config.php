@@ -17,5 +17,5 @@ const DOCOPT_CONFIG = [
     'version' => 'Generate deff 0.0.1'
 ];
 
-const VALID_FORMAT_OUTPUT_TYPES = ['stylish'];
-const VALID_FILE_EXTENSIONS = ['json'];
+const VALID_OUTPUT_FORMAT_TYPES = ['stylish'];
+const VALID_FILES_EXTENSIONS = ['json'];
