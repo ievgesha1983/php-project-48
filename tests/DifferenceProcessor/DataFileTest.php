@@ -1,6 +1,6 @@
 <?php
 
-namespace DifferenceProcessor;
+namespace Hexlet\Code\Tests\DifferenceProcessor;
 
 use Hexlet\Code\DifferenceProcessor\DataFile;
 use PHPUnit\Framework\TestCase;
