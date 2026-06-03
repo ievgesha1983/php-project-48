@@ -30,7 +30,7 @@ class FunctionsTest extends TestCase
         $expected = file_get_contents(__DIR__ . '/fixtures/diff_info_result.txt');
         $format = 'stylish';
         $firstFile = 'tests/../tests/fixtures/file1.json';
-        $secondFile = $currentDir . '/tests/fixtures/file2.json';
+        $secondFile = "{$currentDir}/tests/fixtures/file2.json";
         $this->assertEquals($expected, genDiff($firstFile, $secondFile, $format));
     }
 }
