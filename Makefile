@@ -16,4 +16,4 @@ lint:
 # Запуск Тестов
 
 test:
-	composer exec --verbose phpunit tests -- --display-deprecations
+	composer exec --verbose phpunit tests
