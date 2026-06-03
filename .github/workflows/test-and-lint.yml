@@ -1,6 +1,7 @@
 name: test-and-lint
-on: push
-
+on:
+  push:
+  pull_request:
 jobs:
   test-and-lint:
     runs-on: ubuntu-latest
@@ -12,3 +13,7 @@ jobs:
         run: make lint
       - name: Run tests with coverage
         run: make test-coverage
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
