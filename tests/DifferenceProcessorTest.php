@@ -39,16 +39,20 @@ class DifferenceProcessorTest extends TestCase
                 ['--format' => 'other', '<firstFile>' => 'file1.json', '<secondFile>' => 'file2.json']
             ],
             [
+                'tests/date/file1.json - файл не существует или не соответствует формату',
+                ['--format' => 'stylish', '<firstFile>' => 'tests/date/file1.json', '<secondFile>' => 'file2.json']
+            ],
+            [
+                'file2.json - файл не существует или не соответствует формату',
+                ['--format' => 'stylish', '<firstFile>' => 'tests/fixtures/file1.json', '<secondFile>' => 'file2.json']
+            ],
+            [
                 $expected,
                 [
                     '--format' => 'stylish',
                     '<firstFile>' => 'tests/../tests/fixtures/file1.json',
-                    '<secondFile>' => "{$currentDir}/tests/fixtures/file2.yml"
+                    '<secondFile>' => "{$currentDir}/tests/fixtures/file2.yaml"
                 ]
-            ],
-            [
-                'tests/date/file1.json - файл не существует или не соответствует формату',
-                ['--format' => 'stylish', '<firstFile>' => 'tests/date/file1.json', '<secondFile>' => 'file2.json']
             ],
         ];
     }

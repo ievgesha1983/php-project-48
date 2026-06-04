@@ -64,5 +64,7 @@ class DataFileTest extends TestCase
         ];
         $result = self::$firstFile->getDifferences(self::$secondFile);
         $this->assertEquals($expected, $result);
+        $this->assertNull(self::$errFileJson->getDifferences(self::$secondFile));
+        $this->assertNull(self::$firstFile->getDifferences(self::$errFileYaml));
     }
 }
