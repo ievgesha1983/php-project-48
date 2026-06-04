@@ -71,6 +71,83 @@ class DifferenceProcessor
         return implode("\n", ['{', ...$differencesResult, "{$tab}}"]);
     }
 
+    public static function toPlainString(array $differences): string
+    {
+        if (empty($differences)) {
+            return '';
+        }
+
+        $toPlain = function (array $differences, array $path = []) use (&$toPlain): array {
+            $differencesResult = array_reduce(
+                $differences,
+                function (array $acc, array $difference) use ($toPlain, $differences, $path): array {
+                    if (!array_key_exists('type', $difference)) {
+                        return $acc;
+                    }
+
+                    $getStringValue = function (mixed $value): string {
+                        if (is_bool($value)) {
+                            return $value ? 'true' : 'false';
+                        }
+                        if (is_null($value)) {
+                            return 'null';
+                        }
+                        if (is_array($value)) {
+                            return '[complex value]';
+                        }
+                        if (is_string($value)) {
+                            return "'{$value}'";
+                        }
+                        return $value;
+                    };
+
+                    $path[] = $difference['key'];
+                    switch ($difference['type']) {
+                        case -1:
+                            $newPath = implode('.', $path);
+                            $updatedProp = array_filter(
+                                $differences,
+                                fn($property) => $property['type'] === 1 && $property['key'] === $difference['key']
+                            );
+                            $updatedProp = array_values($updatedProp);
+                            if (count($updatedProp) > 0) {
+                                $oldValue = $getStringValue($difference['value']);
+                                $newValue = $getStringValue($updatedProp[0]['value']);
+                                $acc[] = "Property '{$newPath}' was updated. From {$oldValue} to {$newValue}";
+                            } else {
+                                $acc[] = "Property '{$newPath}' was removed";
+                            }
+                            break;
+                        case 0:
+                            if (is_array($difference['value'])) {
+                                $acc = array_merge($acc, $toPlain($difference['value'], $path));
+                            }
+                            break;
+                        case 1:
+                            $updatedProp = array_filter(
+                                $differences,
+                                fn($property) => $property['type'] === -1 && $property['key'] === $difference['key']
+                            );
+                            if (count($updatedProp) === 0) {
+                                $newPath = implode('.', $path);
+                                $newValue = $getStringValue($difference['value']);
+                                $acc[] = "Property '{$newPath}' was added with value: {$newValue}";
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    return $acc;
+                },
+                []
+            );
+
+            return $differencesResult;
+        };
+
+        return implode("\n", $toPlain($differences));
+    }
+
     public static function getDiffInfo(array $args): string
     {
         $checkArgs = self::checkingArguments($args);
@@ -90,6 +167,10 @@ class DifferenceProcessor
 
         $diffInfo = $firstFile->getDifferences($secondFile);
 
-        return self::toStylishString($diffInfo);
+        $result = match ($args['--format']) {
+            'stylish' => self::toStylishString($diffInfo),
+            'plain' => self::toPlainString($diffInfo),
+        };
+        return $result;
     }
 }
