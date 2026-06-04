@@ -92,39 +92,69 @@ class DataFile
             return null;
         }
 
-        $firstDataArr = get_object_vars($this->data);
-        $secondDataArr = get_object_vars($secondData);
+        $iter = function (\stdClass $firstData, \stdClass|false $secondData = false) use (&$iter): array {
+            $toArrayOrValue = function (mixed $value) use (&$iter): mixed {
+                return is_object($value) ? $iter($value) : $value;
+            };
+            $firstDataArr = get_object_vars($firstData);
+            if ($secondData === false) {
+                return array_map(
+                    function (mixed $value, string $key) use ($toArrayOrValue): array {
+                        return ['type' => 0, 'key' => $key, 'value' => $toArrayOrValue($value)];
+                    },
+                    $firstDataArr,
+                    array_keys($firstDataArr)
+                );
+            }
 
-        $firstDataUniqueKeys = array_diff(array_keys($firstDataArr), array_keys($secondDataArr));
-        $firstDataUniqueDifferences = array_map(
-            fn ($key) => ['type' => -1, 'key' => $key, 'value' => $firstDataArr[$key]],
-            $firstDataUniqueKeys
-        );
+            $secondDataArr = get_object_vars($secondData);
 
-        $intersectKeys = array_intersect(array_keys($firstDataArr), array_keys($secondDataArr));
-        $intersectDifferences = array_reduce(
-            $intersectKeys,
-            function ($acc, $key) use ($firstDataArr, $secondDataArr) {
-                if ($firstDataArr[$key] === $secondDataArr[$key]) {
-                    $acc[] = ['type' => 0, 'key' => $key, 'value' => $firstDataArr[$key]];
-                } else {
-                    $acc[] = ['type' => -1, 'key' => $key, 'value' => $firstDataArr[$key]];
-                    $acc[] = ['type' => 1, 'key' => $key, 'value' => $secondDataArr[$key]];
-                }
-                return $acc;
-            },
-            []
-        );
+            $firstDataUniqueKeys = array_diff(array_keys($firstDataArr), array_keys($secondDataArr));
+            $firstDataUniqueDifferences = array_map(
+                fn ($key) => ['type' => -1, 'key' => $key, 'value' => $toArrayOrValue($firstDataArr[$key])],
+                $firstDataUniqueKeys
+            );
 
-        $secondDataUniqueKeys = array_diff(array_keys($secondDataArr), array_keys($firstDataArr));
-        $secondDataUniqueDifferences = array_map(
-            fn ($key) => ['type' => 1, 'key' => $key, 'value' => $secondDataArr[$key]],
-            $secondDataUniqueKeys
-        );
+            $intersectKeys = array_intersect(array_keys($firstDataArr), array_keys($secondDataArr));
+            $intersectDifferences = array_reduce(
+                $intersectKeys,
+                function (array $acc, string $key) use (&$iter, $firstDataArr, $secondDataArr, $toArrayOrValue): array {
+                    if (
+                        is_object($firstDataArr[$key]) && $firstDataArr[$key] == $secondDataArr[$key] ||
+                        $firstDataArr[$key] === $secondDataArr[$key]
+                    ) {
+                        $acc[] = ['type' => 0, 'key' => $key, 'value' => $toArrayOrValue($firstDataArr[$key])];
+                    } elseif (is_object($firstDataArr[$key]) && is_object($secondDataArr[$key])) {
+                        $acc[] = ['type' => 0, 'key' => $key, 'value' =>
+                            $iter($firstDataArr[$key], $secondDataArr[$key])
+                        ];
+                    } else {
+                        $acc[] = ['type' => -1, 'key' => $key, 'value' => $toArrayOrValue($firstDataArr[$key])];
+                        $acc[] = ['type' => 1, 'key' => $key, 'value' => $toArrayOrValue($secondDataArr[$key])];
+                    }
+                    return $acc;
+                },
+                []
+            );
 
-        $differences = array_merge($firstDataUniqueDifferences, $intersectDifferences, $secondDataUniqueDifferences);
-        $sortDifferences = sortBy($differences, fn($item) => $item['key']);
+            $secondDataUniqueKeys = array_diff(array_keys($secondDataArr), array_keys($firstDataArr));
+            $secondDataUniqueDifferences = array_map(
+                fn ($key) => ['type' => 1, 'key' => $key, 'value' =>
+                    is_object($secondDataArr[$key]) ? $iter($secondDataArr[$key]) : $secondDataArr[$key]
+                ],
+                $secondDataUniqueKeys
+            );
 
-        return array_values($sortDifferences);
+            $differences = array_merge(
+                $firstDataUniqueDifferences,
+                $intersectDifferences,
+                $secondDataUniqueDifferences
+            );
+            $sortDifferences = sortBy($differences, fn($item) => $item['key']);
+
+            return array_values($sortDifferences);
+        };
+
+        return $iter($this->data, $secondData);
     }
 }

@@ -26,7 +26,7 @@ class DifferenceProcessorTest extends TestCase
 
     public static function getDiffInfoProvider(): array
     {
-        $expected = file_get_contents(__DIR__ . '/fixtures/diff_info_result.txt');
+        $stylishResult = file_get_contents(__DIR__ . '/fixtures/result_stylish.txt');
         $currentDir = getcwd();
         return [
             ['Формат вывода не указан', []],
@@ -47,7 +47,7 @@ class DifferenceProcessorTest extends TestCase
                 ['--format' => 'stylish', '<firstFile>' => 'tests/fixtures/file1.json', '<secondFile>' => 'file2.json']
             ],
             [
-                $expected,
+                $stylishResult,
                 [
                     '--format' => 'stylish',
                     '<firstFile>' => 'tests/../tests/fixtures/file1.json',

@@ -29,7 +29,7 @@ class FunctionsTest extends TestCase
     public function testGenDiff(): void
     {
         $currentDir = getcwd();
-        $expected = file_get_contents(__DIR__ . '/fixtures/diff_info_result.txt');
+        $expected = file_get_contents(__DIR__ . '/fixtures/result_stylish.txt');
         $format = 'stylish';
         $firstFile = 'tests/../tests/fixtures/file1.json';
         $secondFile = "{$currentDir}/tests/fixtures/file2.json";

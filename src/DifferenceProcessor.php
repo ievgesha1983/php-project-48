@@ -44,25 +44,31 @@ class DifferenceProcessor
         return true;
     }
 
-    public static function toStylishString(array $differences): string
+    public static function toStylishString(array $differences, int $iteration = 0): string
     {
+        $tab = str_repeat("    ", $iteration);
         $differencesResult = array_map(
-            function ($difference) {
+            function ($difference) use ($iteration) {
+                $tab = str_repeat("    ", $iteration);
                 $sign = match ($difference['type']) {
                     -1 => '-',
                     0 => ' ',
                     1 => '+'
                 };
-                if (is_bool($difference['value'])) {
+                if (is_array($difference['value'])) {
+                    $value =  self::toStylishString($difference['value'], $iteration + 1);
+                } elseif (is_bool($difference['value'])) {
                     $value = $difference['value'] ? 'true' : 'false';
+                } elseif (is_null($difference['value'])) {
+                    $value = 'null';
                 } else {
                     $value = $difference['value'];
                 }
-                return "  {$sign} {$difference['key']}: {$value}";
+                return "{$tab}  {$sign} {$difference['key']}: {$value}";
             },
             $differences
         );
-        return implode("\n", ['{', ...$differencesResult, '}']);
+        return implode("\n", ['{', ...$differencesResult, "{$tab}}"]);
     }
 
     public static function getDiffInfo(array $args): string
