@@ -1,5 +1,6 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/ievgesha1983/php-project-48/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/ievgesha1983/php-project-48/actions)
+[![test-and-lint](https://github.com/ievgesha1983/php-project-48/actions/workflows/test-and-lint.yml/badge.svg)](https://github.com/ievgesha1983/php-project-48/actions/workflows/test-and-lint.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ievgesha1983_php-project-48&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ievgesha1983_php-project-48)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ievgesha1983_php-project-48&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ievgesha1983_php-project-48)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ievgesha1983_php-project-48&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=ievgesha1983_php-project-48)
