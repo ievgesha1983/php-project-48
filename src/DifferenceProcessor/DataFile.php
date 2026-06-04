@@ -2,6 +2,8 @@
 
 namespace Hexlet\Code\DifferenceProcessor;
 
+use Symfony\Component\Yaml\Yaml;
+
 use function Funct\Collection\sortBy;
 
 class DataFile
@@ -47,9 +49,30 @@ class DataFile
         return is_null($this->data) ? null : clone($this->data);
     }
 
+    public function parse(): void
+    {
+        switch ($this->extension) {
+            case 'json':
+                $this->parseJson();
+                break;
+            case 'yaml':
+            case 'yml':
+                $this->parseYaml();
+                break;
+            default:
+                break;
+        }
+    }
+
     public function parseJson(): void
     {
         $this->data = json_decode(file_get_contents("{$this->path}/{$this->baseName}"));
+    }
+
+    public function parseYaml(): void
+    {
+        $parsedData = Yaml::parseFile("{$this->path}/{$this->baseName}", Yaml::PARSE_OBJECT_FOR_MAP);
+        $this->data = is_object($parsedData) ? $parsedData : null;
     }
 
     public function toJson(): string

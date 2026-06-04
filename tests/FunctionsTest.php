@@ -22,6 +22,8 @@ class FunctionsTest extends TestCase
         $this->assertFalse(isValidFile('tests/fixtures/file1.jsan'));
         $this->assertTrue(isValidFile('tests/fixtures/file1.json'));
         $this->assertTrue(isValidFile("{$currentDir}/tests/fixtures/file1.json"));
+        $this->assertTrue(isValidFile('tests/fixtures/file1.yml'));
+        $this->assertTrue(isValidFile("{$currentDir}/tests/fixtures/file2.yaml"));
     }
 
     public function testGenDiff(): void

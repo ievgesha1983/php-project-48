@@ -7,40 +7,48 @@ use PHPUnit\Framework\TestCase;
 
 class DataFileTest extends TestCase
 {
-    private DataFile $firstFile;
-    private DataFile $secondFile;
-    private DataFile $jsanFile;
+    private static DataFile $firstFile;
+    private static DataFile $secondFile;
+    private static DataFile $jsanFile;
+    private static DataFile $errFileJson;
+    private static DataFile $errFileYaml;
 
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->firstFile = new DataFile("tests/fixtures/file1.json");
-        $this->firstFile->parseJson();
-        $this->secondFile = new DataFile("tests/fixtures/file2.json");
-        $this->secondFile->parseJson();
-        $this->jsanFile = new DataFile('tests/fixtures/file1.jsan');
-        $this->jsanFile->parseJson();
+        self::$firstFile = new DataFile("tests/fixtures/file1.json");
+        self::$firstFile->parse();
+        self::$secondFile = new DataFile("tests/fixtures/file2.yaml");
+        self::$secondFile->parse();
+        self::$jsanFile = new DataFile('tests/fixtures/file1.jsan');
+        self::$jsanFile->parse();
+        self::$errFileJson = new DataFile('tests/fixtures/error-file.json');
+        self::$errFileJson->parse();
+        self::$errFileYaml = new DataFile('tests/fixtures/error-file.yml');
+        self::$errFileYaml->parse();
     }
     public function testGetters(): void
     {
-        $this->assertEquals('file1', $this->firstFile->getName());
-        $this->assertEquals('file1.json', $this->firstFile->getBaseName());
-        $this->assertEquals('tests/fixtures', $this->firstFile->getPath());
-        $this->assertEquals('json', $this->firstFile->getExtension());
+        $this->assertEquals('file1', self::$firstFile->getName());
+        $this->assertEquals('file1.json', self::$firstFile->getBaseName());
+        $this->assertEquals('tests/fixtures', self::$firstFile->getPath());
+        $this->assertEquals('json', self::$firstFile->getExtension());
     }
 
     public function testParseAndGetData(): void
     {
-        $this->assertEquals('hexlet.io', $this->firstFile->getData()->host);
+        $this->assertEquals('hexlet.io', self::$firstFile->getData()->host);
+        $this->assertEquals(true, self::$secondFile->getData()->verbose);
 
-        $this->assertNull($this->jsanFile->getData());
+        $this->assertNull(self::$errFileJson->getData());
+        $this->assertNull(self::$errFileYaml->getData());
     }
 
     public function testToJson(): void
     {
         $expected = '{"host":"hexlet.io","timeout":50,"proxy":"123.234.53.22","follow":false}';
-        $this->assertEquals($expected, $this->firstFile->toJson());
+        $this->assertEquals($expected, self::$firstFile->toJson());
 
-        $this->assertEquals('null', $this->jsanFile->toJson());
+        $this->assertEquals('null', self::$errFileJson->toJson());
     }
 
     public function testGetDifferences(): void
@@ -54,7 +62,7 @@ class DataFileTest extends TestCase
             ['type' => 1, 'key' => 'timeout', 'value' => 20],
             ['type' => 1, 'key' => 'verbose', 'value' => true],
         ];
-        $result = $this->firstFile->getDifferences($this->secondFile);
+        $result = self::$firstFile->getDifferences(self::$secondFile);
         $this->assertEquals($expected, $result);
     }
 }

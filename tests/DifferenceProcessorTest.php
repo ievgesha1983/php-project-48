@@ -43,7 +43,7 @@ class DifferenceProcessorTest extends TestCase
                 [
                     '--format' => 'stylish',
                     '<firstFile>' => 'tests/../tests/fixtures/file1.json',
-                    '<secondFile>' => "{$currentDir}/tests/fixtures/file2.json"
+                    '<secondFile>' => "{$currentDir}/tests/fixtures/file2.yml"
                 ]
             ],
             [

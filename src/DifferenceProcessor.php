@@ -78,9 +78,9 @@ class DifferenceProcessor
         }
 
         $firstFile = new DataFile($args['<firstFile>']);
-        $firstFile->parseJson();
+        $firstFile->parse();
         $secondFile = new DataFile($args['<secondFile>']);
-        $secondFile->parseJson();
+        $secondFile->parse();
 
         $diffInfo = $firstFile->getDifferences($secondFile);
 

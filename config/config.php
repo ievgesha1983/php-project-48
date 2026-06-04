@@ -18,4 +18,4 @@ const DOCOPT_CONFIG = [
 ];
 
 const VALID_OUTPUT_FORMAT_TYPES = ['stylish'];
-const VALID_FILES_EXTENSIONS = ['json'];
+const VALID_FILES_EXTENSIONS = ['json', 'yml', 'yaml'];

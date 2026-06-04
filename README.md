@@ -14,6 +14,10 @@ Uses to generate the differences between two input files and output the result.
 
 [![asciicast](https://asciinema.org/a/SLaD0LPg0NUIozSH.svg)](https://asciinema.org/a/SLaD0LPg0NUIozSH)
 
-#### Using the Difference Generator
+#### Using the Difference Generator with json files
 
 [![asciicast](https://asciinema.org/a/TlLiWWQZi4xbBaoy.svg)](https://asciinema.org/a/TlLiWWQZi4xbBaoy)
+
+#### Using the Difference Generator with json and yaml files
+
+[![asciicast](https://asciinema.org/a/iK9l6DLPA2kuutti.svg)](https://asciinema.org/a/iK9l6DLPA2kuutti)
