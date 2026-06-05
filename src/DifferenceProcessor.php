@@ -44,35 +44,43 @@ class DifferenceProcessor
         return true;
     }
 
-    public static function toStylishString(array $differences, int $iteration = 0): string
+    public static function toStylishString(array $diff): string
     {
-        $tab = str_repeat("    ", $iteration);
-        $differencesResult = array_map(
-            function ($difference) use ($iteration) {
-                $tab = str_repeat("    ", $iteration);
-                $sign = match ($difference['type']) {
-                    -1 => '-',
-                    0 => ' ',
-                    1 => '+'
-                };
-                if (is_array($difference['value'])) {
-                    $value =  self::toStylishString($difference['value'], $iteration + 1);
-                } elseif (is_bool($difference['value'])) {
-                    $value = $difference['value'] ? 'true' : 'false';
-                } elseif (is_null($difference['value'])) {
-                    $value = 'null';
-                } else {
-                    $value = $difference['value'];
-                }
-                return "{$tab}  {$sign} {$difference['key']}: {$value}";
-            },
-            $differences
-        );
-        return implode("\n", ['{', ...$differencesResult, "{$tab}}"]);
+        $differences = $diff['differences'];
+
+        $iter = function (array $differences, int $iteration) use (&$iter): string {
+            $tab = str_repeat("    ", $iteration);
+            $differencesResult = array_map(
+                function ($difference) use ($iter, $iteration) {
+                    $tab = str_repeat("    ", $iteration);
+                    $sign = match ($difference['type']) {
+                        -1 => '-',
+                        0 => ' ',
+                        1 => '+'
+                    };
+                    if (is_array($difference['value'])) {
+                        $value =  $iter($difference['value'], $iteration + 1);
+                    } elseif (is_bool($difference['value'])) {
+                        $value = $difference['value'] ? 'true' : 'false';
+                    } elseif (is_null($difference['value'])) {
+                        $value = 'null';
+                    } else {
+                        $value = $difference['value'];
+                    }
+                    return "{$tab}  {$sign} {$difference['key']}: {$value}";
+                },
+                $differences
+            );
+
+            return implode("\n", ['{', ...$differencesResult, "{$tab}}"]);
+        };
+
+        return $iter($differences, 0);
     }
 
-    public static function toPlainString(array $differences): string
+    public static function toPlainString(array $diff): string
     {
+        $differences = $diff['differences'];
         if (empty($differences)) {
             return '';
         }
@@ -165,7 +173,21 @@ class DifferenceProcessor
         $secondFile = new DataFile($args['<secondFile>']);
         $secondFile->parse();
 
-        $diffInfo = $firstFile->getDifferences($secondFile);
+        $diffInfo = [
+            "created" => "",
+            "type" => "normal",
+            "files" => [
+                "firstFile" => [
+                    "path" => $firstFile->getPath(),
+                    "fileName" => $firstFile->getBaseName(),
+                ],
+                "secondFile" => [
+                    "path" => $secondFile->getPath(),
+                    "fileName" => $secondFile->getBaseName(),
+                ]
+            ],
+            "differences" => $firstFile->getDifferences($secondFile)
+        ];
 
         $result = match ($args['--format']) {
             'stylish' => self::toStylishString($diffInfo),

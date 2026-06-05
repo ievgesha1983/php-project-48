@@ -11,9 +11,11 @@ class DifferenceProcessorTest extends TestCase
     public function testToStylishString(): void
     {
         $data = [
-            ['type' => -1, 'key' => 'follow', 'value' => false],
-            ['type' => 0, 'key' => 'host', 'value' => 'hexlet.io'],
-            ['type' => -1, 'key' => 'proxy', 'value' => '123.234.53.22'],
+            "differences" => [
+                ['type' => -1, 'key' => 'follow', 'value' => false],
+                ['type' => 0, 'key' => 'host', 'value' => 'hexlet.io'],
+                ['type' => -1, 'key' => 'proxy', 'value' => '123.234.53.22'],
+            ]
         ];
         $expected = "{\n  - follow: false\n    host: hexlet.io\n  - proxy: 123.234.53.22\n}";
         $this->assertEquals($expected, DifferenceProcessor::toStylishString($data));
