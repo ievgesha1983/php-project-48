@@ -95,22 +95,6 @@ class DifferenceProcessor
                         return $acc;
                     }
 
-                    $getStringValue = function (mixed $value): string {
-                        if (is_bool($value)) {
-                            return $value ? 'true' : 'false';
-                        }
-                        if (is_null($value)) {
-                            return 'null';
-                        }
-                        if (is_array($value)) {
-                            return '[complex value]';
-                        }
-                        if (is_string($value)) {
-                            return "'{$value}'";
-                        }
-                        return $value;
-                    };
-
                     $path[] = $difference['key'];
                     switch ($difference['type']) {
                         case -1:
@@ -120,9 +104,9 @@ class DifferenceProcessor
                                 fn($property) => $property['type'] === 1 && $property['key'] === $difference['key']
                             );
                             $updatedProperty = array_values($updatedProperty);
-                            if (count($updatedProperty) > 0) {
-                                $oldValue = $getStringValue($difference['value']);
-                                $newValue = $getStringValue($updatedProperty[0]['value']);
+                            if (!empty($updatedProperty)) {
+                                $oldValue = getStringValue($difference['value']);
+                                $newValue = getStringValue($updatedProperty[0]['value']);
                                 $acc[] = "Property '{$newPath}' was updated. From {$oldValue} to {$newValue}";
                             } else {
                                 $acc[] = "Property '{$newPath}' was removed";
@@ -138,9 +122,9 @@ class DifferenceProcessor
                                 $differences,
                                 fn($property) => $property['type'] === -1 && $property['key'] === $difference['key']
                             );
-                            if (count($updatedProperty) === 0) {
+                            if (empty($updatedProperty)) {
                                 $newPath = implode('.', $path);
-                                $newValue = $getStringValue($difference['value']);
+                                $newValue = getStringValue($difference['value']);
                                 $acc[] = "Property '{$newPath}' was added with value: {$newValue}";
                             }
                             break;
@@ -195,7 +179,7 @@ class DifferenceProcessor
                             $updatedProperty = array_values($updatedProperty);
                             $oldValue = $difference['value'];
                             $oldValueString = getStringValue($oldValue);
-                            if (count($updatedProperty) > 0) {
+                            if (!empty($updatedProperty)) {
                                 $newValue = $updatedProperty[0]['value'];
                                 $newValueString = getStringValue($newValue);
                                 $message = "Updated from {$oldValueString} to {$newValueString}";
@@ -237,7 +221,7 @@ class DifferenceProcessor
                                 $differences,
                                 fn($property) => $property['type'] === -1 && $property['key'] === $difference['key']
                             );
-                            if (count($updatedProperty) === 0) {
+                            if (empty($updatedProperty)) {
                                 $newValue = $difference['value'];
                                 $acc["addedProperties"][] = [
                                     "path" => implode('.', $path),
