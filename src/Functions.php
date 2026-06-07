@@ -1,8 +1,8 @@
 <?php
 
-namespace Hexlet\Code\Functions;
+namespace Differ\Functions;
 
-use Hexlet\Code\DifferenceProcessor;
+use Differ\DifferenceProcessor;
 
 function isValidFormat(string $format): bool
 {
@@ -44,10 +44,4 @@ function getStringValue(mixed $value): string
         return "'{$value}'";
     }
     return $value;
-}
-
-function genDiff(string $firstFile, string $secondFile, string $format = 'stylish'): string
-{
-    $args = ['<firstFile>' => $firstFile, '<secondFile>' => $secondFile, '--format' => $format];
-    return DifferenceProcessor::getDiffInfo($args);
 }

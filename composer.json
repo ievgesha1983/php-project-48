@@ -1,5 +1,5 @@
 {
-    "name": "hexlet/code",
+    "name": "differ/differ",
     "description": "Difference calculator",
     "type": "project",
     "license": "MIT",
@@ -8,12 +8,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Hexlet\\Code\\": "src/",
-            "Hexlet\\Code\\Tests\\": "tests/"
+            "Differ\\": "src/",
+            "Differ\\Tests\\": "tests/"
         },
         "files": [
             "config/config.php",
-            "src/Functions.php"
+            "src/Functions.php",
+            "src/differ.php"
         ]
     },
     "authors": [

@@ -1,12 +1,12 @@
 <?php
 
-namespace Hexlet\Code\Tests;
+namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-use function Hexlet\Code\Functions\genDiff;
-use function Hexlet\Code\Functions\isValidFile;
-use function Hexlet\Code\Functions\isValidFormat;
+use function Differ\Differ\genDiff;
+use function Differ\Functions\isValidFile;
+use function Differ\Functions\isValidFormat;
 
 class FunctionsTest extends TestCase
 {

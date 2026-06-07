@@ -1,8 +1,8 @@
 <?php
 
-namespace Hexlet\Code\Tests;
+namespace Differ\Tests;
 
-use Hexlet\Code\DifferenceProcessor;
+use Differ\DifferenceProcessor;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

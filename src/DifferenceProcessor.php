@@ -1,14 +1,14 @@
 <?php
 
-namespace Hexlet\Code;
+namespace Differ;
 
 use Docopt\Response;
-use Hexlet\Code\DifferenceProcessor\DataFile;
+use Differ\DifferenceProcessor\DataFile;
 
-use function Hexlet\Code\Functions\getNonComplexValue;
-use function Hexlet\Code\Functions\getStringValue;
-use function Hexlet\Code\Functions\isValidFile;
-use function Hexlet\Code\Functions\isValidFormat;
+use function Differ\Functions\getNonComplexValue;
+use function Differ\Functions\getStringValue;
+use function Differ\Functions\isValidFile;
+use function Differ\Functions\isValidFormat;
 
 class DifferenceProcessor
 {

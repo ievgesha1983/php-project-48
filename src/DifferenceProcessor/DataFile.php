@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\DifferenceProcessor;
+namespace Differ\DifferenceProcessor;
 
 use Symfony\Component\Yaml\Yaml;
 
