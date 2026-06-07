@@ -24,6 +24,28 @@ function isValidFile(string $filePath): bool
     return $checkExtension;
 }
 
+function getNonComplexValue(mixed $value): mixed
+{
+    return is_array($value) ? '[complex value]' : $value;
+}
+
+function getStringValue(mixed $value): string
+{
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
+    }
+    if (is_null($value)) {
+        return 'null';
+    }
+    if (is_array($value)) {
+        return '[complex value]';
+    }
+    if (is_string($value)) {
+        return "'{$value}'";
+    }
+    return $value;
+}
+
 function genDiff(string $firstFile, string $secondFile, string $format = 'stylish'): string
 {
     $args = ['<firstFile>' => $firstFile, '<secondFile>' => $secondFile, '--format' => $format];

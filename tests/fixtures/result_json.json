@@ -1,0 +1,85 @@
+{
+  "diff": {
+    "created": "",
+    "type": "normal",
+    "files": {
+      "firstFile": {
+        "path": "tests\/..\/tests\/fixtures",
+        "fileName": "file1.json"
+      },
+      "secondFile": {
+        "path": "\/home\/evgesha\/projects\/php-project-48\/tests\/fixtures",
+        "fileName": "file2.yaml"
+      }
+    }
+  },
+  "addedProperties": [
+    {
+      "path": "common",
+      "name": "follow",
+      "newValue": false
+    },
+    {
+      "path": "common",
+      "name": "setting4",
+      "newValue": "blah blah"
+    },
+    {
+      "path": "common",
+      "name": "setting5",
+      "newValue": "[complex value]"
+    },
+    {
+      "path": "common.setting6",
+      "name": "ops",
+      "newValue": "vops"
+    },
+    {
+      "path": "",
+      "name": "group3",
+      "newValue": "[complex value]"
+    }
+  ],
+  "removedProperties": [
+    {
+      "path": "common",
+      "name": "setting2",
+      "oldValue": 200
+    },
+    {
+      "path": "",
+      "name": "group2",
+      "oldValue": "[complex value]"
+    }
+  ],
+  "updatedProperties": [
+    {
+      "path": "common",
+      "name": "setting3",
+      "message": "Updated from true to null",
+      "oldValue": true,
+      "newValue": null
+    },
+    {
+      "path": "common.setting6.doge",
+      "name": "wow",
+      "message": "Updated from '' to 'so much'",
+      "oldValue": "",
+      "newValue": "so much"
+    },
+    {
+      "path": "group1",
+      "name": "baz",
+      "message": "Updated from 'bas' to 'bars'",
+      "oldValue": "bas",
+      "newValue": "bars"
+    },
+    {
+      "path": "group1",
+      "name": "nest",
+      "message": "Updated from [complex value] to 'str'",
+      "oldValue": "[complex value]",
+      "newValue": "str"
+    }
+  ]
+}
