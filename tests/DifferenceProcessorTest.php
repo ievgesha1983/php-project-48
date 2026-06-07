@@ -20,6 +20,8 @@ class DifferenceProcessorTest extends TestCase
         $plainResult = file_get_contents(__DIR__ . '/fixtures/result_plain.txt');
         $jsonResult = file_get_contents(__DIR__ . '/fixtures/result_json.json');
         $currentDir = getcwd();
+        $currentDirJson = str_replace('/', '\/', $currentDir);
+        $jsonResult = str_replace('FULL_PATH_TO_PROJECT', $currentDirJson, $jsonResult);
         return [
             ['Формат вывода не указан', []],
             ['Формат вывода не указан', ['<firstFile>' => '', '<secondFile>' => '']],

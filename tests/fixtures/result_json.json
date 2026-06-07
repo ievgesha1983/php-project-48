@@ -8,7 +8,7 @@
         "fileName": "file1.json"
       },
       "secondFile": {
-        "path": "\/home\/evgesha\/projects\/php-project-48\/tests\/fixtures",
+        "path": "FULL_PATH_TO_PROJECT\/tests\/fixtures",
         "fileName": "file2.yaml"
       }
     }
