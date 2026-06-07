@@ -22,3 +22,7 @@ Uses to generate the differences between two input files and output the result.
 #### Using the Difference Generator with json and yaml files
 
 [![asciicast](https://asciinema.org/a/iK9l6DLPA2kuutti.svg)](https://asciinema.org/a/iK9l6DLPA2kuutti)
+
+#### Using the json format output
+
+[![asciicast](https://asciinema.org/a/yVJppSEv8vd9mWFT.svg)](https://asciinema.org/a/yVJppSEv8vd9mWFT)
