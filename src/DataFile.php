@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\DifferenceProcessor;
+namespace Differ;
 
 use Symfony\Component\Yaml\Yaml;
 

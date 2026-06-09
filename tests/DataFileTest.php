@@ -1,8 +1,8 @@
 <?php
 
-namespace Differ\Tests\DifferenceProcessor;
+namespace Differ\Tests;
 
-use Differ\DifferenceProcessor\DataFile;
+use Differ\DataFile;
 use PHPUnit\Framework\TestCase;
 
 class DataFileTest extends TestCase

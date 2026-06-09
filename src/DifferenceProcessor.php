@@ -2,9 +2,6 @@
 
 namespace Differ;
 
-use Docopt\Response;
-use Differ\DifferenceProcessor\DataFile;
-
 use function Differ\Functions\getNonComplexValue;
 use function Differ\Functions\getStringValue;
 use function Differ\Functions\isValidFile;
