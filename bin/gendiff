@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-
 $autoload1 = __DIR__ . "/../vendor/autoload.php";
 $autoload2 = __DIR__ . "/../../../autoload.php";
 
@@ -17,4 +16,4 @@ $config = require(__DIR__ . "/../config/config.php");
 
 $docopt = Docopt::handle($config['docoptScheme'], $config['docoptConfig']);
 
-echo DifferenceProcessor::getDiffInfo($docopt->args) . PHP_EOL;
+echo DifferenceProcessor::genDiff($docopt->args) . PHP_EOL;

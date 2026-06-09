@@ -2,8 +2,6 @@
 
 namespace Differ\Functions;
 
-use Differ\DifferenceProcessor;
-
 function isValidFormat(string $format): bool
 {
     global $config;

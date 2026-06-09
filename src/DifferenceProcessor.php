@@ -9,35 +9,57 @@ use function Differ\Functions\isValidFormat;
 
 class DifferenceProcessor
 {
-    private static function checkingArguments(array $args): true|string
+    public static function genDiff(array $args): string
     {
-        if (empty($args['--format'])) {
-            return 'Формат вывода не указан';
+        $validateArgs = self::validateArguments($args);
+        if ($validateArgs !== true) {
+            return $validateArgs;
         }
 
-        if (empty($args['<firstFile>'])) {
-            return 'Не указан firstFile';
-        }
+        $firstFile = new DataFile($args['<firstFile>']);
+        $firstFile->parse();
 
-        if (empty($args['<secondFile>'])) {
-            return 'Не указан secondFile';
-        }
+        $secondFile = new DataFile($args['<secondFile>']);
+        $secondFile->parse();
 
-        return true;
+        $diff = [
+            'diffInfo' => [
+                'created' => '',
+                'type' => 'normal',
+                'files' => [
+                    'firstFile' => [
+                        'path' => $firstFile->getPath(),
+                        'fileName' => $firstFile->getBaseName(),
+                    ],
+                    'secondFile' => [
+                        'path' => $secondFile->getPath(),
+                        'fileName' => $secondFile->getBaseName(),
+                    ]
+                ]
+            ],
+            'differences' => $firstFile->getDifferences($secondFile)
+        ];
+
+        $result = match ($args['--format']) {
+            'stylish' => self::toStylishString($diff),
+            'plain' => self::toPlainString($diff),
+            'json' => self::toJsonString($diff),
+        };
+        return $result;
     }
 
     private static function validateArguments(array $args): true|string
     {
         if (!isValidFormat($args['--format'])) {
-            return 'Формат ввода указан некорректно';
+            return "Формат ввода '{$args['--format']}' указан некорректно";
         }
 
         if (!isValidFile($args['<firstFile>'])) {
-            return "{$args['<firstFile>']} - файл не существует или не соответствует формату";
+            return "'{$args['<firstFile>']}' - файл не существует или не соответствует формату";
         }
 
         if (!isValidFile($args['<secondFile>'])) {
-            return "{$args['<secondFile>']} - файл не существует или не соответствует формату";
+            return "'{$args['<secondFile>']}' - файл не существует или не соответствует формату";
         }
 
         return true;
@@ -239,48 +261,5 @@ class DifferenceProcessor
         };
 
         return array_merge($jsonArray, $toJsonArray($differences));
-    }
-
-    public static function getDiffInfo(array $args): string
-    {
-        $checkArgs = self::checkingArguments($args);
-        if ($checkArgs !== true) {
-            return $checkArgs;
-        }
-
-        $validateArgs = self::validateArguments($args);
-        if ($validateArgs !== true) {
-            return $validateArgs;
-        }
-
-        $firstFile = new DataFile($args['<firstFile>']);
-        $firstFile->parse();
-        $secondFile = new DataFile($args['<secondFile>']);
-        $secondFile->parse();
-
-        $diff = [
-            'diffInfo' => [
-                'created' => '',
-                'type' => 'normal',
-                'files' => [
-                    'firstFile' => [
-                        'path' => $firstFile->getPath(),
-                        'fileName' => $firstFile->getBaseName(),
-                    ],
-                    'secondFile' => [
-                        'path' => $secondFile->getPath(),
-                        'fileName' => $secondFile->getBaseName(),
-                    ]
-                ]
-            ],
-            'differences' => $firstFile->getDifferences($secondFile)
-        ];
-
-        $result = match ($args['--format']) {
-            'stylish' => self::toStylishString($diff),
-            'plain' => self::toPlainString($diff),
-            'json' => self::toJsonString($diff),
-        };
-        return $result;
     }
 }
