@@ -10,6 +10,12 @@ use function Differ\Functions\isValidFormat;
 
 class FunctionsTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        global $config;
+        $config = require(__DIR__ . "/fixtures/config.php");
+    }
+
     public function testIsValidFormat(): void
     {
         $this->assertFalse(isValidFormat(''));

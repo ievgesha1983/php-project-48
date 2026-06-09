@@ -8,6 +8,12 @@ use PHPUnit\Framework\TestCase;
 
 class DifferenceProcessorTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        global $config;
+        $config = require(__DIR__ . "/fixtures/config.php");
+    }
+
     #[DataProvider('getDiffInfoProvider')]
     public function testGetDiffInfo($expected, array $arguments): void
     {

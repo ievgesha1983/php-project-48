@@ -13,6 +13,8 @@ if (file_exists($autoload1)) {
 
 use Differ\DifferenceProcessor;
 
-$docopt = Docopt::handle(DOCOPT_SCHEME, DOCOPT_CONFIG);
+$config = require(__DIR__ . "/../config/config.php");
+
+$docopt = Docopt::handle($config['docoptScheme'], $config['docoptConfig']);
 
 echo DifferenceProcessor::getDiffInfo($docopt->args) . PHP_EOL;

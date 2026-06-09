@@ -6,17 +6,21 @@ use Differ\DifferenceProcessor;
 
 function isValidFormat(string $format): bool
 {
-    return in_array($format, VALID_OUTPUT_FORMAT_TYPES);
+    global $config;
+
+    return in_array($format, $config['validOutputFormatTypes']);
 }
 
 function isValidFile(string $filePath): bool
 {
+    global $config;
+
     if (!is_file($filePath) || !is_readable($filePath)) {
         return false;
     }
 
     $checkExtension = array_reduce(
-        VALID_FILES_EXTENSIONS,
+        $config['validFilesExtensions'],
         fn($acc, $ext) => $acc ? $acc : str_ends_with($filePath, ".{$ext}"),
         false
     );
