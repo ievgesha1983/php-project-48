@@ -10,7 +10,7 @@ use const Differ\Formatters\VALID_OUTPUT_FORMAT_TYPES;
 
 const VALID_FILES_EXTENSIONS = ['json', 'yml', 'yaml'];
 
-function genDiff(string $firstFile, string $secondFile, string $format): string
+function genDiff(string $firstFile, string $secondFile, string $format = 'stylish'): string
 {
     try {
         if (!in_array($format, VALID_OUTPUT_FORMAT_TYPES)) {
