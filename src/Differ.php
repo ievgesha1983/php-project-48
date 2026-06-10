@@ -128,7 +128,7 @@ function getDifferences(\stdClass $firstData, \stdClass|false $secondData = fals
     if ($secondData === false) {
         return array_map(
             function (mixed $value, string $key) use ($toArrayOrValue): array {
-                return ['type' => 0, 'key' => $key, 'value' => $toArrayOrValue($value)];
+                return ['type' => 'unchangedProperty', 'key' => $key, 'value' => $toArrayOrValue($value)];
             },
             $firstDataArr,
             array_keys($firstDataArr)
@@ -139,37 +139,45 @@ function getDifferences(\stdClass $firstData, \stdClass|false $secondData = fals
 
     $firstDataUniqueKeys = array_diff(array_keys($firstDataArr), array_keys($secondDataArr));
     $firstDataUniqueDifferences = array_map(
-        fn ($key) => ['type' => -1, 'key' => $key, 'value' => $toArrayOrValue($firstDataArr[$key])],
+        fn ($key) => ['type' => 'removedProperty', 'key' => $key, 'value' => $toArrayOrValue($firstDataArr[$key])],
         $firstDataUniqueKeys
     );
 
     $intersectKeys = array_intersect(array_keys($firstDataArr), array_keys($secondDataArr));
-    $intersectDifferences = array_reduce(
-        $intersectKeys,
-        function (array $acc, string $key) use ($firstDataArr, $secondDataArr, $toArrayOrValue): array {
+    $intersectDifferences = array_map(
+        function (string $key) use ($firstDataArr, $secondDataArr, $toArrayOrValue): array {
             if (
                 is_object($firstDataArr[$key]) && $firstDataArr[$key] == $secondDataArr[$key] ||
                 $firstDataArr[$key] === $secondDataArr[$key]
             ) {
-                $acc[] = ['type' => 0, 'key' => $key, 'value' => $toArrayOrValue($firstDataArr[$key])];
-                return $acc;
-            }
-            if (is_object($firstDataArr[$key]) && is_object($secondDataArr[$key])) {
-                $acc[] = ['type' => 0, 'key' => $key, 'value' =>
-                    getDifferences($firstDataArr[$key], $secondDataArr[$key])
+                return [
+                    'type' => 'unchangedProperty',
+                    'key' => $key,
+                    'value' => $toArrayOrValue($firstDataArr[$key])
                 ];
-                return $acc;
             }
-            $acc[] = ['type' => -1, 'key' => $key, 'value' => $toArrayOrValue($firstDataArr[$key])];
-            $acc[] = ['type' => 1, 'key' => $key, 'value' => $toArrayOrValue($secondDataArr[$key])];
-            return $acc;
+
+            if (is_object($firstDataArr[$key]) && is_object($secondDataArr[$key])) {
+                return [
+                    'type' => 'unchangedProperty',
+                    'key' => $key,
+                    'value' => getDifferences($firstDataArr[$key], $secondDataArr[$key])
+                ];
+            }
+
+            return [
+                'type' => 'updatedProperty',
+                'key' => $key,
+                'oldValue' => $toArrayOrValue($firstDataArr[$key]),
+                'newValue' => $toArrayOrValue($secondDataArr[$key])
+            ];
         },
-        []
+        $intersectKeys
     );
 
     $secondDataUniqueKeys = array_diff(array_keys($secondDataArr), array_keys($firstDataArr));
     $secondDataUniqueDifferences = array_map(
-        fn ($key) => ['type' => 1, 'key' => $key, 'value' => $toArrayOrValue($secondDataArr[$key])],
+        fn ($key) => ['type' => 'addedProperty', 'key' => $key, 'value' => $toArrayOrValue($secondDataArr[$key])],
         $secondDataUniqueKeys
     );
 

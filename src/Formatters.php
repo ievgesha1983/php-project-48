@@ -22,7 +22,7 @@ function getNonComplexValue(mixed $value): mixed
     return is_array($value) ? '[complex value]' : $value;
 }
 
-function getStringValue(mixed $value): string
+function getStringValue(mixed $value, $format = 'standard'): string
 {
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
@@ -33,8 +33,8 @@ function getStringValue(mixed $value): string
     if (is_array($value)) {
         return '[complex value]';
     }
-    if (is_string($value)) {
-        return "'{$value}'";
+    if (is_string($value) && $format !== 'withoutQuotes') {
+        return  "'{$value}'";
     }
     return $value;
 }

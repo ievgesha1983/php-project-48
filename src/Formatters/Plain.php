@@ -11,57 +11,44 @@ function toPlainString(array $diff): string
         return '';
     }
 
-    $toPlain = function (array $differences, array $path = []) use (&$toPlain): array {
-        $differencesResult = array_reduce(
-            $differences,
-            function (array $acc, array $difference) use ($toPlain, $differences, $path): array {
-                if (!array_key_exists('type', $difference)) {
-                    return $acc;
-                }
+    return toPlain($differences);
+}
 
-                $path[] = $difference['key'];
-                switch ($difference['type']) {
-                    case -1:
-                        $newPath = implode('.', $path);
-                        $updatedProperty = array_filter(
-                            $differences,
-                            fn($property) => $property['type'] === 1 && $property['key'] === $difference['key']
-                        );
-                        $updatedProperty = array_values($updatedProperty);
-                        if (!empty($updatedProperty)) {
-                            $oldValue = getStringValue($difference['value']);
-                            $newValue = getStringValue($updatedProperty[0]['value']);
-                            $acc[] = "Property '{$newPath}' was updated. From {$oldValue} to {$newValue}";
-                        } else {
-                            $acc[] = "Property '{$newPath}' was removed";
-                        }
-                        break;
-                    case 0:
-                        if (is_array($difference['value'])) {
-                            $acc = array_merge($acc, $toPlain($difference['value'], $path));
-                        }
-                        break;
-                    case 1:
-                        $updatedProperty = array_filter(
-                            $differences,
-                            fn($property) => $property['type'] === -1 && $property['key'] === $difference['key']
-                        );
-                        if (empty($updatedProperty)) {
-                            $newPath = implode('.', $path);
-                            $newValue = getStringValue($difference['value']);
-                            $acc[] = "Property '{$newPath}' was added with value: {$newValue}";
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                return $acc;
-            },
-            []
-        );
+function toPlain(array $differences, array $path = []): string
+{
+    $differencesResult = array_map(
+        function (array $difference) use ($path): string {
+            if (!array_key_exists('type', $difference)) {
+                return '';
+            }
+            var_dump($difference);
+            $path[] = $difference['key'];
+            switch ($difference['type']) {
+                case 'removedProperty':
+                    $newPath = implode('.', $path);
+                    $result = "Property '{$newPath}' was removed";
+                    break;
+                case 'addedProperty':
+                    $newPath = implode('.', $path);
+                    $newValue = getStringValue($difference['value']);
+                    $result = "Property '{$newPath}' was added with value: {$newValue}";
+                    break;
+                case 'updatedProperty':
+                    $newPath = implode('.', $path);
+                    $newValue = getStringValue($difference['newValue']);
+                    $oldValue = getStringValue($difference['oldValue']);
+                    $result = "Property '{$newPath}' was updated. From {$oldValue} to {$newValue}";
+                    break;
+                case 'unchangedProperty':
+                    $result = is_array($difference['value']) ? toPlain($difference['value'], $path) : '';
+                    break;
+                default:
+                    throw new \Exception('Неподдерживаемый тип свойства');
+            }
+            return $result;
+        },
+        $differences
+    );
 
-        return $differencesResult;
-    };
-
-    return implode("\n", $toPlain($differences));
+    return implode("\n", array_filter($differencesResult));
 }
