@@ -13,7 +13,10 @@
         },
         "files": [
             "src/Differ.php",
-            "src/Formatters.php"
+            "src/Formatters.php",
+            "src/Formatters/Json.php",
+            "src/Formatters/Plain.php",
+            "src/Formatters/Stylish.php"
         ]
     },
     "authors": [
