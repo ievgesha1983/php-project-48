@@ -21,7 +21,6 @@ function toPlain(array $differences, array $path = []): string
             if (!array_key_exists('type', $difference)) {
                 return '';
             }
-            var_dump($difference);
             $path[] = $difference['key'];
             switch ($difference['type']) {
                 case 'removedProperty':
