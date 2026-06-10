@@ -12,9 +12,8 @@
             "Differ\\Tests\\": "tests/"
         },
         "files": [
-            "config/config.php",
-            "src/Functions.php",
-            "src/differ.php"
+            "src/Differ.php",
+            "src/Formatters.php"
         ]
     },
     "authors": [

@@ -5,11 +5,11 @@
     "files": {
       "firstFile": {
         "path": "tests\/..\/tests\/fixtures",
-        "fileName": "file1.json"
+        "name": "file1.json"
       },
       "secondFile": {
         "path": "FULL_PATH_TO_PROJECT\/tests\/fixtures",
-        "fileName": "file2.yaml"
+        "name": "file2.yaml"
       }
     }
   },

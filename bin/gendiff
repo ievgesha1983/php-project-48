@@ -10,10 +10,24 @@ if (file_exists($autoload1)) {
     require_once $autoload2;
 }
 
-use Differ\DifferenceProcessor;
+use function Differ\Differ\genDiff;
 
-$config = require(__DIR__ . "/../config/config.php");
+const DOCOPT_SCHEME = "Generate diff
 
-$docopt = Docopt::handle($config['docoptScheme'], $config['docoptConfig']);
+Usage:
+  gendiff (-h|--help)
+  gendiff (-v|--version)
+  gendiff [--format <fmt>] <firstFile> <secondFile>
+  
+Options:
+  -h --help                     Show this help
+  -v --version                  Show version
+  --format <fmt>                Report format [default: stylish]
+";
+const DOCOPT_CONFIG = ['version' => 'Generate deff 0.0.1'];
 
-echo DifferenceProcessor::genDiff($docopt->args) . PHP_EOL;
+$docopt = Docopt::handle(DOCOPT_SCHEME, DOCOPT_CONFIG);
+
+$diffString = genDiff($docopt->args['<firstFile>'], $docopt->args['<secondFile>'], $docopt->args['--format']);
+
+echo $diffString . PHP_EOL;
