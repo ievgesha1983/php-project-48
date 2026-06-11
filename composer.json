@@ -14,6 +14,7 @@
         "files": [
             "src/Differ.php",
             "src/Formatters.php",
+            "src/Parsers.php",
             "src/Formatters/Json.php",
             "src/Formatters/Plain.php",
             "src/Formatters/Stylish.php"
