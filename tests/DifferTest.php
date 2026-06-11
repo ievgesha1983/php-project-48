@@ -25,9 +25,22 @@ class DifferTest extends TestCase
     public static function getGenDiffExceptionsProvider(): array
     {
         return [
-            ["Формат вывода '' не поддерживается", 'file1.json', 'file2.json', ''],
-            ["Формат вывода 'other' не поддерживается", 'file1.json', 'file2.json', 'other'],
-            ["'' - файл не существует или не читается", '', 'file2.json', 'stylish'],
+            [
+                "Формат вывода '' не поддерживается",
+                'file1.json',
+                'file2.json',
+                ''],
+            [
+                "Формат вывода 'other' не поддерживается",
+                'file1.json',
+                'file2.json',
+                'other'
+            ],
+            [
+                "'' - файл не существует или не читается",
+                '',
+                'file2.json',
+                'stylish'],
             [
                 "'tests/fixtures/file1.jsan' - расширение файла не поддерживается",
                 'tests/fixtures/file1.jsan',

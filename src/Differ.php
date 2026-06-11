@@ -12,22 +12,22 @@ const VALID_FILES_EXTENSIONS = ['json', 'yml', 'yaml'];
 
 function genDiff(string $firstFile, string $secondFile, string $format = 'stylish'): string
 {
-        if (!in_array($format, VALID_OUTPUT_FORMAT_TYPES)) {
-            throw new \Exception("Формат вывода '{$format}' не поддерживается");
-        }
+    if (!in_array($format, VALID_OUTPUT_FORMAT_TYPES)) {
+        throw new \Exception("Формат вывода '{$format}' не поддерживается");
+    }
 
-        $firstFileProperties = getFileProperties($firstFile);
-        $secondFileProperties = getFileProperties($secondFile);
+    $firstFileProperties = getFileProperties($firstFile);
+    $secondFileProperties = getFileProperties($secondFile);
 
-        $firstContent = getContent($firstFile);
-        $secondContent = getContent($secondFile);
+    $firstContent = getContent($firstFile);
+    $secondContent = getContent($secondFile);
 
-        $firstFileData = parse($firstFileProperties, $firstContent);
-        $secondFileData = parse($secondFileProperties, $secondContent);
+    $firstFileData = parse($firstFileProperties, $firstContent);
+    $secondFileData = parse($secondFileProperties, $secondContent);
 
-        $diff = makeDiff($firstFileData, $secondFileData);
+    $diff = makeDiff($firstFileData, $secondFileData);
 
-        return formatDiff($diff, $format);
+    return formatDiff($diff, $format);
 }
 
 function getFileProperties(string $filePath): array
@@ -94,7 +94,11 @@ function getDifferences(\stdClass $firstData, \stdClass|false $secondData = fals
     if ($secondData === false) {
         return array_map(
             function (mixed $value, string $key) use ($toArrayOrValue): array {
-                return ['type' => 'unchangedProperty', 'key' => $key, 'value' => $toArrayOrValue($value)];
+                return [
+                    'type' => 'unchangedProperty',
+                    'key' => $key,
+                    'value' => $toArrayOrValue($value)
+                ];
             },
             $firstDataArr,
             array_keys($firstDataArr)
@@ -105,7 +109,11 @@ function getDifferences(\stdClass $firstData, \stdClass|false $secondData = fals
 
     $firstDataUniqueKeys = array_diff(array_keys($firstDataArr), array_keys($secondDataArr));
     $firstDataUniqueDifferences = array_map(
-        fn ($key) => ['type' => 'removedProperty', 'key' => $key, 'value' => $toArrayOrValue($firstDataArr[$key])],
+        fn ($key) => [
+            'type' => 'removedProperty',
+            'key' => $key,
+            'value' => $toArrayOrValue($firstDataArr[$key])
+        ],
         $firstDataUniqueKeys
     );
 
@@ -143,7 +151,11 @@ function getDifferences(\stdClass $firstData, \stdClass|false $secondData = fals
 
     $secondDataUniqueKeys = array_diff(array_keys($secondDataArr), array_keys($firstDataArr));
     $secondDataUniqueDifferences = array_map(
-        fn ($key) => ['type' => 'addedProperty', 'key' => $key, 'value' => $toArrayOrValue($secondDataArr[$key])],
+        fn ($key) => [
+            'type' => 'addedProperty',
+            'key' => $key,
+            'value' => $toArrayOrValue($secondDataArr[$key])
+        ],
         $secondDataUniqueKeys
     );
 
