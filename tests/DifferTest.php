@@ -9,20 +9,21 @@ use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
+    #[DataProvider('getGenDiffExceptionsProvider')]
+    public function testGenDiffExceptions($expected, $firstFile, $secondFile, $format): void
+    {
+        $this->expectExceptionMessage($expected);
+        genDiff($firstFile, $secondFile, $format);
+    }
+
     #[DataProvider('getGenDiffProvider')]
-    public function testGenDiffInfo($expected, $firstFile, $secondFile, $format): void
+    public function testGenDiff($expected, $firstFile, $secondFile, $format): void
     {
         $this->assertEquals($expected, genDiff($firstFile, $secondFile, $format));
     }
 
-    public static function getGenDiffProvider(): array
+    public static function getGenDiffExceptionsProvider(): array
     {
-        $stylishResult = file_get_contents(__DIR__ . '/fixtures/result_stylish.txt');
-        $plainResult = file_get_contents(__DIR__ . '/fixtures/result_plain.txt');
-        $jsonResult = file_get_contents(__DIR__ . '/fixtures/result_json.json');
-        $currentDir = getcwd();
-        $currentDirJson = str_replace('/', '\/', $currentDir);
-        $jsonResult = str_replace('FULL_PATH_TO_PROJECT', $currentDirJson, $jsonResult);
         return [
             ["Формат вывода '' не поддерживается", 'file1.json', 'file2.json', ''],
             ["Формат вывода 'other' не поддерживается", 'file1.json', 'file2.json', 'other'],
@@ -39,6 +40,18 @@ class DifferTest extends TestCase
                 'file2.json',
                 'stylish'
             ],
+        ];
+    }
+
+    public static function getGenDiffProvider(): array
+    {
+        $stylishResult = file_get_contents(__DIR__ . '/fixtures/result_stylish.txt');
+        $plainResult = file_get_contents(__DIR__ . '/fixtures/result_plain.txt');
+        $jsonResult = file_get_contents(__DIR__ . '/fixtures/result_json.json');
+        $currentDir = getcwd();
+        $currentDirJson = str_replace('/', '\/', $currentDir);
+        $jsonResult = str_replace('FULL_PATH_TO_PROJECT', $currentDirJson, $jsonResult);
+        return [
             [
                 $stylishResult,
                 'tests/../tests/fixtures/file1.json',

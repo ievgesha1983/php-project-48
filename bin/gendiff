@@ -26,8 +26,12 @@ Options:
 ";
 const DOCOPT_CONFIG = ['version' => 'Generate deff 0.0.1'];
 
-$docopt = Docopt::handle(DOCOPT_SCHEME, DOCOPT_CONFIG);
+try {
+    $docopt = Docopt::handle(DOCOPT_SCHEME, DOCOPT_CONFIG);
 
-$diffString = genDiff($docopt->args['<firstFile>'], $docopt->args['<secondFile>'], $docopt->args['--format']);
+    $diffString = genDiff($docopt->args['<firstFile>'], $docopt->args['<secondFile>'], $docopt->args['--format']);
 
-echo $diffString . PHP_EOL;
+    echo $diffString . PHP_EOL;
+} catch (\Exception $exception) {
+    echo $exception->getMessage() . PHP_EOL;
+}

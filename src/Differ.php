@@ -12,7 +12,6 @@ const VALID_FILES_EXTENSIONS = ['json', 'yml', 'yaml'];
 
 function genDiff(string $firstFile, string $secondFile, string $format = 'stylish'): string
 {
-    try {
         if (!in_array($format, VALID_OUTPUT_FORMAT_TYPES)) {
             throw new \Exception("Формат вывода '{$format}' не поддерживается");
         }
@@ -29,9 +28,6 @@ function genDiff(string $firstFile, string $secondFile, string $format = 'stylis
         $diff = makeDiff($firstFileData, $secondFileData);
 
         return formatDiff($diff, $format);
-    } catch (\Exception $exception) {
-        return $exception->getMessage();
-    }
 }
 
 function getFileProperties(string $filePath): array
