@@ -3,7 +3,7 @@
 namespace Differ\Differ;
 
 use function Differ\Formatters\formatDiff;
-use function Differ\Parsers\parse;
+use function Differ\Parsers\parseFileContent;
 use function Funct\Collection\sortBy;
 
 use const Differ\Formatters\VALID_OUTPUT_FORMAT_TYPES;
@@ -22,8 +22,8 @@ function genDiff(string $firstFile, string $secondFile, string $format = 'stylis
     $firstContent = getContent($firstFile);
     $secondContent = getContent($secondFile);
 
-    $firstFileData = parse($firstFileProperties, $firstContent);
-    $secondFileData = parse($secondFileProperties, $secondContent);
+    $firstFileData = parseFileContent($firstFileProperties, $firstContent);
+    $secondFileData = parseFileContent($secondFileProperties, $secondContent);
 
     $diff = makeDiff($firstFileData, $secondFileData);
 
