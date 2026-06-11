@@ -34,7 +34,7 @@ function toJsonArray(array $differences, array $path = []): array
 {
     $differencesResult = array_reduce(
         $differences,
-        function (array $acc, array $difference) use ($differences, $path): array {
+        function (array $acc, array $difference) use ($path): array {
             if (!array_key_exists('type', $difference)) {
                 return $acc;
             }
@@ -42,18 +42,22 @@ function toJsonArray(array $differences, array $path = []): array
             switch ($difference['type']) {
                 case 'addedProperty':
                     $newValue = $difference['value'];
-                    $acc["addedProperties"][] = [
-                        "path" => implode('.', $path),
-                        "name" => $difference['key'],
-                        "newValue" => getNonComplexValue($newValue)
+                    $acc['addedProperties'][] = [
+                        'addedProperty' => [
+                            'path' => implode('.', $path),
+                            'name' => $difference['key'],
+                            'newValue' => getNonComplexValue($newValue)
+                        ]
                     ];
                     break;
                 case 'removedProperty':
                     $oldValue = $difference['value'];
-                    $acc["removedProperties"][] = [
-                        "path" => implode('.', $path),
-                        "name" => $difference['key'],
-                        "oldValue" => getNonComplexValue($oldValue)
+                    $acc['removedProperties'][] = [
+                        'removedProperty' => [
+                            'path' => implode('.', $path),
+                            'name' => $difference['key'],
+                            'oldValue' => getNonComplexValue($oldValue)
+                        ]
                     ];
                     break;
                 case 'updatedProperty':
@@ -62,29 +66,31 @@ function toJsonArray(array $differences, array $path = []): array
                     $newValueString = getStringValue($newValue);
                     $oldValueString = getStringValue($oldValue);
                     $message = "Updated from {$oldValueString} to {$newValueString}";
-                    $acc["updatedProperties"][] = [
-                        "path" => implode('.', $path),
-                        "name" => $difference['key'],
-                        "message" => $message,
-                        "oldValue" => getNonComplexValue($oldValue),
-                        "newValue" => getNonComplexValue($newValue)
+                    $acc['updatedProperties'][] = [
+                        'updatedProperty' => [
+                            'path' => implode('.', $path),
+                            'name' => $difference['key'],
+                            'message' => $message,
+                            'oldValue' => getNonComplexValue($oldValue),
+                            'newValue' => getNonComplexValue($newValue)
+                        ]
                     ];
                     break;
                 case 'unchangedProperty':
                     if (is_array($difference['value'])) {
                         $newPath = [...$path, $difference['key']];
                         $childrenArray = toJsonArray($difference['value'], $newPath);
-                        $acc["addedProperties"] = array_merge(
-                            $acc["addedProperties"] ?? [],
-                            $childrenArray["addedProperties"] ?? []
+                        $acc['addedProperties'] = array_merge(
+                            $acc['addedProperties'] ?? [],
+                            $childrenArray['addedProperties'] ?? []
                         );
-                        $acc["removedProperties"] = array_merge(
-                            $acc["removedProperties"] ?? [],
-                            $childrenArray["removedProperties"] ?? []
+                        $acc['removedProperties'] = array_merge(
+                            $acc['removedProperties'] ?? [],
+                            $childrenArray['removedProperties'] ?? []
                         );
-                        $acc["updatedProperties"] = array_merge(
-                            $acc["updatedProperties"] ?? [],
-                            $childrenArray["updatedProperties"] ?? []
+                        $acc['updatedProperties'] = array_merge(
+                            $acc['updatedProperties'] ?? [],
+                            $childrenArray['updatedProperties'] ?? []
                         );
                     }
                     break;
