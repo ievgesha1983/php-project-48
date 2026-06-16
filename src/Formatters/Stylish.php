@@ -16,7 +16,7 @@ function toStylishStringIter(mixed $differences, int $iteration): string
         ($differences['type'] === 'value' || $differences['type'] === 'complexValue')
     ) {
         return toString($differences['value'], $iteration);
-    };
+    }
 
     $tab = str_repeat("    ", $iteration);
     $differencesResult = array_map(
@@ -48,7 +48,7 @@ function toStylishStringIter(mixed $differences, int $iteration): string
 function toString(mixed $value, int $iteration = 0): string
 {
     if (!is_array($value)) {
-        return getStringValue($value, 'withoutQuotes');
+        return getStringValue($value);
     }
 
     $tab = str_repeat("    ", $iteration);
