@@ -11,18 +11,70 @@
 
 Uses to generate the differences between two input files and output the result.
 
+### Prerequisites
+- Linux, MacOS, WSL
+- PHP >=8.3
+- Make
+- Git
+
+### Install
+```
+git clone https://github.com/ievgesha1983/php-project-48.git
+cd php-project-48
+
+make install
+```
+
 #### Install Difference Generator packages
 
 [![asciicast](https://asciinema.org/a/SLaD0LPg0NUIozSH.svg)](https://asciinema.org/a/SLaD0LPg0NUIozSH)
 
-#### Using the Difference Generator with json files
+#### Using the Difference Generator with .json files
+
+- In the CLI interface:
+```
+./bin/gendiff data/file1.json data/file2.json
+```
+- As a function:
+```
+<php
+
+echo \Differ\Differ\genDiff('data/file1.json', 'data/file2.json');
+```
 
 [![asciicast](https://asciinema.org/a/TlLiWWQZi4xbBaoy.svg)](https://asciinema.org/a/TlLiWWQZi4xbBaoy)
 
-#### Using the Difference Generator with json and yaml files
+#### Using the Difference Generator with .json and .yaml files
 
 [![asciicast](https://asciinema.org/a/iK9l6DLPA2kuutti.svg)](https://asciinema.org/a/iK9l6DLPA2kuutti)
 
-#### Using the json format output
+#### Using the plain output format
 
-[![asciicast](https://asciinema.org/a/yVJppSEv8vd9mWFT.svg)](https://asciinema.org/a/yVJppSEv8vd9mWFT)
+- In the CLI interface:
+```
+./bin/gendiff --format plain data/file1.json data/file2.json
+```
+- As a function:
+```
+<php
+
+echo \Differ\Differ\genDiff('data/file1.json', 'data/file2.json', 'plain');
+```
+
+[![asciicast](https://asciinema.org/a/gPmyrL7RShLz3tzp.svg)](https://asciinema.org/a/gPmyrL7RShLz3tzp)
+
+#### Using the json output format
+
+- In the CLI interface:
+```
+./bin/gendiff --format json data/file1.json data/file2.yaml
+```
+
+- As a function:
+```
+<php
+
+echo \Differ\Differ\genDiff('data/file1.json', 'data/file2.yaml', 'json');
+```
+
+[![asciicast](https://asciinema.org/a/1seU9gmUdVETi4GQ.svg)](https://asciinema.org/a/1seU9gmUdVETi4GQ)
