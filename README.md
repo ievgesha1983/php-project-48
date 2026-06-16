@@ -31,7 +31,7 @@ make install
 
 #### Using the Difference Generator with .json files
 
-- In the CLI interface:
+- In the CLI:
 ```
 ./bin/gendiff data/file1.json data/file2.json
 ```
@@ -50,7 +50,7 @@ echo \Differ\Differ\genDiff('data/file1.json', 'data/file2.json');
 
 #### Using the plain output format
 
-- In the CLI interface:
+- In the CLI:
 ```
 ./bin/gendiff --format plain data/file1.json data/file2.json
 ```
@@ -64,7 +64,7 @@ echo \Differ\Differ\genDiff('data/file1.json', 'data/file2.json', 'plain');
 
 #### Using the json output format
 
-- In the CLI interface:
+- In the CLI:
 ```
 ./bin/gendiff --format json data/file1.json data/file2.yaml
 ```
