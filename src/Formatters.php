@@ -16,8 +16,3 @@ function formatDiff(array $diff, string $format): string
         'json' => toJsonString($diff),
     };
 }
-
-function getNonComplexValue(mixed $value): mixed
-{
-    return is_array($value) ? '[complex value]' : $value;
-}
