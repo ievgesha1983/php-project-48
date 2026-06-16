@@ -2,8 +2,6 @@
 
 namespace Differ\Formatters\Plain;
 
-use function Differ\Formatters\getStringValue;
-
 function toPlainString(array $diff): string
 {
     $differences = $diff['differences'];
@@ -16,6 +14,10 @@ function toPlainString(array $diff): string
 
 function toPlain(array $differences, array $path = []): string
 {
+    if (array_key_exists('type', $differences)) {
+        return '';
+    }
+
     $differencesResult = array_map(
         function (array $difference) use ($path): string {
             if (!array_key_exists('type', $difference)) {
@@ -50,4 +52,23 @@ function toPlain(array $differences, array $path = []): string
     );
 
     return implode("\n", array_filter($differencesResult));
+}
+
+function getStringValue(array $valueObj): string
+{
+    if ($valueObj['type'] === 'complexValue') {
+        return '[complex value]';
+    }
+
+    $value = $valueObj['value'];
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
+    }
+    if (is_null($value)) {
+        return 'null';
+    }
+    if (is_string($value)) {
+        return  "'{$value}'";
+    }
+    return $value;
 }

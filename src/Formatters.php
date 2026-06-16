@@ -21,20 +21,3 @@ function getNonComplexValue(mixed $value): mixed
 {
     return is_array($value) ? '[complex value]' : $value;
 }
-
-function getStringValue(mixed $value, $format = 'standard'): string
-{
-    if (is_bool($value)) {
-        return $value ? 'true' : 'false';
-    }
-    if (is_null($value)) {
-        return 'null';
-    }
-    if (is_array($value)) {
-        return '[complex value]';
-    }
-    if (is_string($value) && $format !== 'withoutQuotes') {
-        return  "'{$value}'";
-    }
-    return $value;
-}

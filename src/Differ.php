@@ -62,7 +62,7 @@ function getContent(string $filePath): string
 
 function makeDiff(array $firstFileData, array $secondFileData): array
 {
-    $differences = getDifferences($firstFileData['data'], $secondFileData['data']);
+    $differences = getDifferences2($firstFileData['data'], $secondFileData['data']);
     $diff = [
         'diffInfo' => [
             'created' => '',
@@ -80,6 +80,8 @@ function makeDiff(array $firstFileData, array $secondFileData): array
         ],
         'differences' => $differences
     ];
+
+    print_r($diff);
 
     return $diff;
 }
@@ -167,4 +169,75 @@ function getDifferences(\stdClass $firstData, \stdClass|false $secondData = fals
     $sortDifferences = sortBy($differences, fn($item) => $item['key']);
 
     return array_values($sortDifferences);
+}
+
+function getDifferences2(object $firstData, object $secondData): array
+{
+    $firstDataArr = get_object_vars($firstData);
+    $secondDataArr = get_object_vars($secondData);
+    $uniqueKeys = array_unique(array_merge(array_keys($firstDataArr), array_keys($secondDataArr)));
+
+    $differences = array_map(
+        function (string|int $key) use ($firstDataArr, $secondDataArr): array {
+            if (!array_key_exists($key, $firstDataArr)) {
+                return [
+                    'type' => 'addedProperty',
+                    'key' => $key,
+                    'value' => toValue($secondDataArr[$key])
+                ];
+            }
+
+            if (!array_key_exists($key, $secondDataArr)) {
+                return [
+                    'type' => 'removedProperty',
+                    'key' => $key,
+                    'value' => toValue($firstDataArr[$key])
+                ];
+            }
+
+            if (
+                is_object($firstDataArr[$key]) && $firstDataArr[$key] == $secondDataArr[$key] ||
+                $firstDataArr[$key] === $secondDataArr[$key]
+            ) {
+                return [
+                    'type' => 'unchangedProperty',
+                    'key' => $key,
+                    'value' => toValue($firstDataArr[$key])
+                ];
+            }
+
+            if (is_object($firstDataArr[$key]) && is_object($secondDataArr[$key])) {
+                return [
+                    'type' => 'unchangedProperty',
+                    'key' => $key,
+                    'value' => getDifferences2($firstDataArr[$key], $secondDataArr[$key])
+                ];
+            }
+
+            return [
+                'type' => 'updatedProperty',
+                'key' => $key,
+                'oldValue' => toValue($firstDataArr[$key]),
+                'newValue' => toValue($secondDataArr[$key])
+            ];
+        },
+        $uniqueKeys,
+    );
+
+    $sortDifferences = sortBy($differences, fn($item) => $item['key']);
+
+    return array_values($sortDifferences);
+}
+
+function toValue(mixed $value): array
+{
+    return is_object($value) || is_array($value) ?
+        [
+            'type' => 'complexValue',
+            'value' => json_decode(json_encode($value), true),
+        ] :
+        [
+            'type' => 'value',
+            'value' => $value
+        ];
 }
