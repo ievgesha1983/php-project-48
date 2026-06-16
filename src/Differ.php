@@ -62,7 +62,7 @@ function getContent(string $filePath): string
 
 function makeDiff(array $firstFileData, array $secondFileData): array
 {
-    $differences = getDifferences2($firstFileData['data'], $secondFileData['data']);
+    $differences = getDifferences($firstFileData['data'], $secondFileData['data']);
     $diff = [
         'diffInfo' => [
             'created' => '',
@@ -81,97 +81,10 @@ function makeDiff(array $firstFileData, array $secondFileData): array
         'differences' => $differences
     ];
 
-    print_r($diff);
-
     return $diff;
 }
 
-function getDifferences(\stdClass $firstData, \stdClass|false $secondData = false): ?array
-{
-    $toArrayOrValue = function (mixed $value): mixed {
-        return is_object($value) ? getDifferences($value) : $value;
-    };
-
-    $firstDataArr = get_object_vars($firstData);
-    if ($secondData === false) {
-        return array_map(
-            function (mixed $value, string $key) use ($toArrayOrValue): array {
-                return [
-                    'type' => 'unchangedProperty',
-                    'key' => $key,
-                    'value' => $toArrayOrValue($value)
-                ];
-            },
-            $firstDataArr,
-            array_keys($firstDataArr)
-        );
-    }
-
-    $secondDataArr = get_object_vars($secondData);
-
-    $firstDataUniqueKeys = array_diff(array_keys($firstDataArr), array_keys($secondDataArr));
-    $firstDataUniqueDifferences = array_map(
-        fn ($key) => [
-            'type' => 'removedProperty',
-            'key' => $key,
-            'value' => $toArrayOrValue($firstDataArr[$key])
-        ],
-        $firstDataUniqueKeys
-    );
-
-    $intersectKeys = array_intersect(array_keys($firstDataArr), array_keys($secondDataArr));
-    $intersectDifferences = array_map(
-        function (string $key) use ($firstDataArr, $secondDataArr, $toArrayOrValue): array {
-            if (
-                is_object($firstDataArr[$key]) && $firstDataArr[$key] == $secondDataArr[$key] ||
-                $firstDataArr[$key] === $secondDataArr[$key]
-            ) {
-                return [
-                    'type' => 'unchangedProperty',
-                    'key' => $key,
-                    'value' => $toArrayOrValue($firstDataArr[$key])
-                ];
-            }
-
-            if (is_object($firstDataArr[$key]) && is_object($secondDataArr[$key])) {
-                return [
-                    'type' => 'unchangedProperty',
-                    'key' => $key,
-                    'value' => getDifferences($firstDataArr[$key], $secondDataArr[$key])
-                ];
-            }
-
-            return [
-                'type' => 'updatedProperty',
-                'key' => $key,
-                'oldValue' => $toArrayOrValue($firstDataArr[$key]),
-                'newValue' => $toArrayOrValue($secondDataArr[$key])
-            ];
-        },
-        $intersectKeys
-    );
-
-    $secondDataUniqueKeys = array_diff(array_keys($secondDataArr), array_keys($firstDataArr));
-    $secondDataUniqueDifferences = array_map(
-        fn ($key) => [
-            'type' => 'addedProperty',
-            'key' => $key,
-            'value' => $toArrayOrValue($secondDataArr[$key])
-        ],
-        $secondDataUniqueKeys
-    );
-
-    $differences = array_merge(
-        $firstDataUniqueDifferences,
-        $intersectDifferences,
-        $secondDataUniqueDifferences
-    );
-    $sortDifferences = sortBy($differences, fn($item) => $item['key']);
-
-    return array_values($sortDifferences);
-}
-
-function getDifferences2(object $firstData, object $secondData): array
+function getDifferences(object $firstData, object $secondData): array
 {
     $firstDataArr = get_object_vars($firstData);
     $secondDataArr = get_object_vars($secondData);
@@ -210,7 +123,7 @@ function getDifferences2(object $firstData, object $secondData): array
                 return [
                     'type' => 'unchangedProperty',
                     'key' => $key,
-                    'value' => getDifferences2($firstDataArr[$key], $secondDataArr[$key])
+                    'value' => getDifferences($firstDataArr[$key], $secondDataArr[$key])
                 ];
             }
 
