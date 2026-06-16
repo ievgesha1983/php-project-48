@@ -60,7 +60,6 @@ echo \Differ\Differ\genDiff('data/file1.json', 'data/file2.json');
 
 echo \Differ\Differ\genDiff('data/file1.json', 'data/file2.json', 'plain');
 ```
-
 [![asciicast](https://asciinema.org/a/gPmyrL7RShLz3tzp.svg)](https://asciinema.org/a/gPmyrL7RShLz3tzp)
 
 #### Using the json output format
@@ -76,5 +75,4 @@ echo \Differ\Differ\genDiff('data/file1.json', 'data/file2.json', 'plain');
 
 echo \Differ\Differ\genDiff('data/file1.json', 'data/file2.yaml', 'json');
 ```
-
 [![asciicast](https://asciinema.org/a/1seU9gmUdVETi4GQ.svg)](https://asciinema.org/a/1seU9gmUdVETi4GQ)
