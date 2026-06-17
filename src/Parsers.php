@@ -18,7 +18,7 @@ function parseFileContent(array $fileProperties, string $content): array
 
     if (is_null($fileData['data'])) {
         $filePath = "{$fileData['path']}/{$fileData['fileName']}";
-        throw new \Exception("'{$filePath} - 'некорректный формат содержимого или файл пуст");
+        throw new \Exception("'{$filePath}' - некорректный формат содержимого или файл пуст");
     }
 
     return $fileData;
