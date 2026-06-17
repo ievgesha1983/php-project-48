@@ -43,7 +43,7 @@ class DifferTest extends TestCase
                 'name' => $secondPathInfo['basename'],
             ],
         ]);
-        $result = str_replace('FILE_INFO_JSON', $fileInfo, $result);
+        $result = str_replace('FILES_INFO_JSON', $fileInfo, $result);
 
         $this->assertEquals($result, genDiff($firstFile, $secondFile, $format));
     }
