@@ -9,26 +9,29 @@ use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
-    #[DataProvider('getDefaultProvider')]
-    public function testDefault($expected, $firstFile, $secondFile): void
+    #[DataProvider('getFilePathProvider')]
+    public function testDefault($firstFile, $secondFile): void
     {
+        $expected = getFixtureFullPath('result_stylish.txt');
         $this->assertStringEqualsFile($expected, genDiff($firstFile, $secondFile));
     }
 
-    #[DataProvider('getStylishProvider')]
-    public function testStylish($expected, $firstFile, $secondFile, $format = false): void
+    #[DataProvider('getFilePathProvider')]
+    public function testStylish($firstFile, $secondFile): void
     {
-        $this->assertStringEqualsFile($expected, genDiff($firstFile, $secondFile, $format));
+        $expected = getFixtureFullPath('result_stylish.txt');
+        $this->assertStringEqualsFile($expected, genDiff($firstFile, $secondFile, 'stylish'));
     }
 
-    #[DataProvider('getPlainProvider')]
-    public function testPlain($expected, $firstFile, $secondFile, $format = false): void
+    #[DataProvider('getFilePathProvider')]
+    public function testPlain($firstFile, $secondFile): void
     {
-        $this->assertStringEqualsFile($expected, genDiff($firstFile, $secondFile, $format));
+        $expected = getFixtureFullPath('result_plain.txt');
+        $this->assertStringEqualsFile($expected, genDiff($firstFile, $secondFile, 'plain'));
     }
 
-    #[DataProvider('getJsonProvider')]
-    public function testJson($expected, $firstFile, $secondFile, $format = false): void
+    #[DataProvider('getFilePathProvider')]
+    public function testJson($firstFile, $secondFile): void
     {
         $result = file_get_contents(getFixtureFullPath('result_json.json'));
         $firstPathInfo = pathinfo($firstFile);
@@ -45,7 +48,7 @@ class DifferTest extends TestCase
         ]);
         $result = str_replace('FILES_INFO_JSON', $fileInfo, $result);
 
-        $this->assertEquals($result, genDiff($firstFile, $secondFile, $format));
+        $this->assertEquals($result, genDiff($firstFile, $secondFile, 'json'));
     }
 
     #[DataProvider('getGenDiffExceptionsProvider')]
@@ -106,16 +109,14 @@ class DifferTest extends TestCase
         ];
     }
 
-    public static function getDefaultProvider(): array
+    public static function getFilePathProvider(): array
     {
         return [
             'json files' => [
-                getFixtureFullPath('result_stylish.txt'),
                 getFixtureFullPath('file1.json'),
                 getFixtureFullPath('file2.json'),
             ],
             'yaml files' => [
-                getFixtureFullPath('result_stylish.txt'),
                 getFixtureFullPath('file1.yml'),
                 getFixtureFullPath('file2.yaml'),
             ]
