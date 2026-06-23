@@ -62,16 +62,17 @@ class DifferTest extends TestCase
     #[DataProvider('getGenDiffExceptionsProvider')]
     public function testGenDiffExceptions($expected, $firstFile, $secondFile, $format): void
     {
+        $firstFixture = $this->getFixtureFullPath($firstFile);
+        $secondFixture = $this->getFixtureFullPath($secondFile);
+        $expected = str_replace('FIRST_FILE', $firstFixture, $expected);
+        $expected = str_replace('SECOND_FILE', $secondFixture, $expected);
+
         $this->expectExceptionMessage($expected);
-        genDiff($firstFile, $secondFile, $format);
+        genDiff($firstFixture, $secondFixture, $format);
     }
 
     public static function getGenDiffExceptionsProvider(): array
     {
-        $errorExtensionPath = realpath(__DIR__ . "/fixtures/error-file.jsan");
-        $errorJsonFormatPath = realpath(__DIR__ . "/fixtures/error-file.json");
-        $errorYamlFormatPath = realpath(__DIR__ . "/fixtures/error-file.yml");
-
         return [
             "'' format not supported" => [
                 "Формат вывода '' не поддерживается",
@@ -85,33 +86,33 @@ class DifferTest extends TestCase
                 'other'
             ],
             'first file not exists' => [
-                "'' - файл не существует или не читается",
+                "'FIRST_FILE' - файл не существует или не читается",
                 '',
                 'file2.json',
                 'stylish'
             ],
             'second file not exists' => [
-                "'file2.json' - файл не существует или не читается",
-                'tests/fixtures/file1.json',
-                'file2.json',
+                "'SECOND_FILE' - файл не существует или не читается",
+                'file1.json',
+                'file2.err',
                 'stylish'
             ],
             'file extension not supported' => [
-                "'{$errorExtensionPath}' - расширение файла не поддерживается",
-                $errorExtensionPath,
+                "'FIRST_FILE' - расширение файла не поддерживается",
+                'error-file.jsan',
                 '',
                 'stylish'
             ],
             'json file format error' => [
-                "'{$errorJsonFormatPath}' - некорректный формат содержимого или файл пуст",
-                $errorJsonFormatPath,
-                $errorYamlFormatPath,
+                "'FIRST_FILE' - некорректный формат содержимого или файл пуст",
+                'error-file.json',
+                'error-file.yml',
                 'stylish'
             ],
             'yaml file format error' => [
-                "'{$errorYamlFormatPath}' - некорректный формат содержимого или файл пуст",
-                $errorYamlFormatPath,
-                $errorJsonFormatPath,
+                "'FIRST_FILE' - некорректный формат содержимого или файл пуст",
+                'error-file.yml',
+                'error-file.json',
                 'stylish'
             ],
         ];
