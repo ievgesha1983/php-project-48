@@ -6,6 +6,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
+use function Differ\Tests\Fixtures\getFixtureFullPath;
 
 class DifferTest extends TestCase
 {
@@ -130,9 +131,4 @@ class DifferTest extends TestCase
             ]
         ];
     }
-}
-
-function getFixtureFullPath(string $fixtureName): string
-{
-    return realpath(__DIR__ . "/fixtures/{$fixtureName}");
 }
