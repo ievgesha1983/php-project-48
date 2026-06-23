@@ -9,33 +9,41 @@ use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
-    #[DataProvider('getFilePathProvider')]
-    public function testDefault($firstFile, $secondFile): void
+    #[DataProvider('getFileExtensionsProvider')]
+    public function testDefault($firstFileExtension, $secondFileExtension): void
     {
         $expected = getFixtureFullPath('result_stylish.txt');
-        $this->assertStringEqualsFile($expected, genDiff($firstFile, $secondFile));
+        $firstFixture = getFixtureFullPath("file1.{$firstFileExtension}");
+        $secondFixture = getFixtureFullPath("file2.{$secondFileExtension}");
+        $this->assertStringEqualsFile($expected, genDiff($firstFixture, $secondFixture));
     }
 
-    #[DataProvider('getFilePathProvider')]
-    public function testStylish($firstFile, $secondFile): void
+    #[DataProvider('getFileExtensionsProvider')]
+    public function testStylish($firstFileExtension, $secondFileExtension): void
     {
         $expected = getFixtureFullPath('result_stylish.txt');
-        $this->assertStringEqualsFile($expected, genDiff($firstFile, $secondFile, 'stylish'));
+        $firstFixture = getFixtureFullPath("file1.{$firstFileExtension}");
+        $secondFixture = getFixtureFullPath("file2.{$secondFileExtension}");
+        $this->assertStringEqualsFile($expected, genDiff($firstFixture, $secondFixture, 'stylish'));
     }
 
-    #[DataProvider('getFilePathProvider')]
-    public function testPlain($firstFile, $secondFile): void
+    #[DataProvider('getFileExtensionsProvider')]
+    public function testPlain($firstFileExtension, $secondFileExtension): void
     {
         $expected = getFixtureFullPath('result_plain.txt');
-        $this->assertStringEqualsFile($expected, genDiff($firstFile, $secondFile, 'plain'));
+        $firstFixture = getFixtureFullPath("file1.{$firstFileExtension}");
+        $secondFixture = getFixtureFullPath("file2.{$secondFileExtension}");
+        $this->assertStringEqualsFile($expected, genDiff($firstFixture, $secondFixture, 'plain'));
     }
 
-    #[DataProvider('getFilePathProvider')]
-    public function testJson($firstFile, $secondFile): void
+    #[DataProvider('getFileExtensionsProvider')]
+    public function testJson($firstFileExtension, $secondFileExtension): void
     {
         $result = file_get_contents(getFixtureFullPath('result_json.json'));
-        $firstPathInfo = pathinfo($firstFile);
-        $secondPathInfo = pathinfo($secondFile);
+        $firstFixture = getFixtureFullPath("file1.{$firstFileExtension}");
+        $secondFixture = getFixtureFullPath("file2.{$secondFileExtension}");
+        $firstPathInfo = pathinfo($firstFixture);
+        $secondPathInfo = pathinfo($secondFixture);
         $fileInfo = json_encode([
             'firstFile' => [
                 'path' => $firstPathInfo['dirname'],
@@ -48,7 +56,7 @@ class DifferTest extends TestCase
         ]);
         $result = str_replace('FILES_INFO_JSON', $fileInfo, $result);
 
-        $this->assertEquals($result, genDiff($firstFile, $secondFile, 'json'));
+        $this->assertEquals($result, genDiff($firstFixture, $secondFixture, 'json'));
     }
 
     #[DataProvider('getGenDiffExceptionsProvider')]
@@ -109,70 +117,16 @@ class DifferTest extends TestCase
         ];
     }
 
-    public static function getFilePathProvider(): array
+    public static function getFileExtensionsProvider(): array
     {
         return [
             'json files' => [
-                getFixtureFullPath('file1.json'),
-                getFixtureFullPath('file2.json'),
+                'json',
+                'json',
             ],
             'yaml files' => [
-                getFixtureFullPath('file1.yml'),
-                getFixtureFullPath('file2.yaml'),
-            ]
-        ];
-    }
-
-    public static function getStylishProvider(): array
-    {
-        return [
-            'json files' => [
-                getFixtureFullPath('result_stylish.txt'),
-                getFixtureFullPath('file1.json'),
-                getFixtureFullPath('file2.json'),
-                'stylish'
-            ],
-            'yaml files' => [
-                getFixtureFullPath('result_stylish.txt'),
-                getFixtureFullPath('file1.yml'),
-                getFixtureFullPath('file2.yaml'),
-                'stylish'
-            ]
-        ];
-    }
-
-    public static function getPlainProvider(): array
-    {
-        return [
-            'json files' => [
-                getFixtureFullPath('result_plain.txt'),
-                getFixtureFullPath('file1.json'),
-                getFixtureFullPath('file2.json'),
-                'plain'
-            ],
-            'yaml files' => [
-                getFixtureFullPath('result_plain.txt'),
-                getFixtureFullPath('file1.yml'),
-                getFixtureFullPath('file2.yaml'),
-                'plain'
-            ],
-        ];
-    }
-
-    public static function getJsonProvider(): array
-    {
-        return [
-            'json files' => [
-                getFixtureFullPath('result_json.json'),
-                getFixtureFullPath('file1.json'),
-                getFixtureFullPath('file2.json'),
-                'json'
-            ],
-            'yaml files' => [
-                getFixtureFullPath('result_json.json'),
-                getFixtureFullPath('file1.yml'),
-                getFixtureFullPath('file2.yaml'),
-                'json'
+                'yml',
+                'yaml',
             ]
         ];
     }
