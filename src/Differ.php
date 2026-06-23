@@ -6,13 +6,13 @@ use function Differ\Formatters\formatDiff;
 use function Differ\Parsers\parse;
 use function Funct\Collection\sortBy;
 
-use const Differ\Formatters\VALID_OUTPUT_FORMAT_TYPES;
+use const Differ\Formatters\OUTPUT_VALID_FORMAT_TYPES;
 
-const VALID_FILES_EXTENSIONS = ['json', 'yml', 'yaml'];
+const INPUT_VALID_FILES_EXTENSIONS = ['json', 'yml', 'yaml'];
 
 function genDiff(string $firstFile, string $secondFile, string $format = 'stylish'): string
 {
-    if (!in_array($format, VALID_OUTPUT_FORMAT_TYPES)) {
+    if (!in_array($format, OUTPUT_VALID_FORMAT_TYPES)) {
         throw new \Exception("Формат вывода '{$format}' не поддерживается");
     }
 
@@ -38,7 +38,7 @@ function getFileProperties(string $filePath): array
 
     $pathData = pathinfo($filePath);
 
-    if (!in_array($pathData["extension"], VALID_FILES_EXTENSIONS)) {
+    if (!in_array($pathData["extension"], INPUT_VALID_FILES_EXTENSIONS)) {
         throw new \Exception("'{$filePath}' - расширение файла не поддерживается");
     }
 
