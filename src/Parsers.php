@@ -24,12 +24,12 @@ function parse(array $fileProperties, string $content): array
     return $fileData;
 }
 
-function parseJson(string $content): \stdClass|null
+function parseJson(string $content): object|null
 {
     return json_decode($content);
 }
 
-function parseYaml($content): \stdClass|null
+function parseYaml($content): object|null
 {
     $parsedData = Yaml::parse($content, Yaml::PARSE_OBJECT_FOR_MAP);
     return is_object($parsedData) ? $parsedData : null;
