@@ -6,43 +6,42 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
-use function Differ\Tests\Fixtures\getFixtureFullPath;
 
 class DifferTest extends TestCase
 {
     #[DataProvider('getFileExtensionsProvider')]
     public function testDefault($firstFileExtension, $secondFileExtension): void
     {
-        $expected = getFixtureFullPath('result_stylish.txt');
-        $firstFixture = getFixtureFullPath("file1.{$firstFileExtension}");
-        $secondFixture = getFixtureFullPath("file2.{$secondFileExtension}");
+        $expected = self::getFixtureFullPath('result_stylish.txt');
+        $firstFixture = self::getFixtureFullPath("file1.{$firstFileExtension}");
+        $secondFixture = self::getFixtureFullPath("file2.{$secondFileExtension}");
         $this->assertStringEqualsFile($expected, genDiff($firstFixture, $secondFixture));
     }
 
     #[DataProvider('getFileExtensionsProvider')]
     public function testStylish($firstFileExtension, $secondFileExtension): void
     {
-        $expected = getFixtureFullPath('result_stylish.txt');
-        $firstFixture = getFixtureFullPath("file1.{$firstFileExtension}");
-        $secondFixture = getFixtureFullPath("file2.{$secondFileExtension}");
+        $expected = self::getFixtureFullPath('result_stylish.txt');
+        $firstFixture = self::getFixtureFullPath("file1.{$firstFileExtension}");
+        $secondFixture = self::getFixtureFullPath("file2.{$secondFileExtension}");
         $this->assertStringEqualsFile($expected, genDiff($firstFixture, $secondFixture, 'stylish'));
     }
 
     #[DataProvider('getFileExtensionsProvider')]
     public function testPlain($firstFileExtension, $secondFileExtension): void
     {
-        $expected = getFixtureFullPath('result_plain.txt');
-        $firstFixture = getFixtureFullPath("file1.{$firstFileExtension}");
-        $secondFixture = getFixtureFullPath("file2.{$secondFileExtension}");
+        $expected = self::getFixtureFullPath('result_plain.txt');
+        $firstFixture = self::getFixtureFullPath("file1.{$firstFileExtension}");
+        $secondFixture = self::getFixtureFullPath("file2.{$secondFileExtension}");
         $this->assertStringEqualsFile($expected, genDiff($firstFixture, $secondFixture, 'plain'));
     }
 
     #[DataProvider('getFileExtensionsProvider')]
     public function testJson($firstFileExtension, $secondFileExtension): void
     {
-        $result = file_get_contents(getFixtureFullPath('result_json.json'));
-        $firstFixture = getFixtureFullPath("file1.{$firstFileExtension}");
-        $secondFixture = getFixtureFullPath("file2.{$secondFileExtension}");
+        $result = file_get_contents(self::getFixtureFullPath('result_json.json'));
+        $firstFixture = self::getFixtureFullPath("file1.{$firstFileExtension}");
+        $secondFixture = self::getFixtureFullPath("file2.{$secondFileExtension}");
         $firstPathInfo = pathinfo($firstFixture);
         $secondPathInfo = pathinfo($secondFixture);
         $fileInfo = json_encode([
@@ -69,9 +68,9 @@ class DifferTest extends TestCase
 
     public static function getGenDiffExceptionsProvider(): array
     {
-        $errorExtensionPath = getFixtureFullPath('error-file.jsan');
-        $errorJsonFormatPath = getFixtureFullPath('error-file.json');
-        $errorYamlFormatPath = getFixtureFullPath('error-file.yml');
+        $errorExtensionPath = self::getFixtureFullPath('error-file.jsan');
+        $errorJsonFormatPath = self::getFixtureFullPath('error-file.json');
+        $errorYamlFormatPath = self::getFixtureFullPath('error-file.yml');
 
         return [
             "'' format not supported" => [
@@ -93,7 +92,7 @@ class DifferTest extends TestCase
             ],
             'second file not exists' => [
                 "'file2.json' - файл не существует или не читается",
-                getFixtureFullPath('file1.json'),
+                self::getFixtureFullPath('file1.json'),
                 'file2.json',
                 'stylish'
             ],
@@ -130,5 +129,10 @@ class DifferTest extends TestCase
                 'yaml',
             ]
         ];
+    }
+
+    public static function getFixtureFullPath(string $fixtureName): string
+    {
+        return realpath(__DIR__ . "/fixtures/{$fixtureName}");
     }
 }
