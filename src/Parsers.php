@@ -4,7 +4,7 @@ namespace Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
 
-function parseFileContent(array $fileProperties, string $content): array
+function parse(array $fileProperties, string $content): array
 {
     $fileData = [
         'fileName' => "{$fileProperties['fileName']}.{$fileProperties['extension']}",
